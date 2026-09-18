@@ -152,14 +152,16 @@ function lookupTask_(taskId, email) {
   if (!taskSheet) throw new Error("The task list is unavailable right now.");
   const values = taskSheet.getDataRange().getDisplayValues();
   if (values.length < 2) throw new Error("Task ID not found. Check the number and try again.");
-  const headers = values[0].map((header) => String(header).trim().toLowerCase());
+  const headerRowIndex = values.findIndex((candidate) => candidate.some((header) => String(header).trim().toLowerCase() === "task id"));
+  if (headerRowIndex < 0) throw new Error("The task list columns are not configured correctly.");
+  const headers = values[headerRowIndex].map((header) => String(header).trim().toLowerCase());
   const idIndex = headers.indexOf("task id");
   const titleIndex = headers.indexOf("task title");
   const descriptionIndex = headers.indexOf("description");
   const responsibleIndex = headers.indexOf("responsible email(s)");
   const statusIndex = headers.indexOf("status");
   if ([idIndex, titleIndex, descriptionIndex, responsibleIndex, statusIndex].some((index) => index < 0)) throw new Error("The task list columns are not configured correctly.");
-  const row = values.slice(1).find((candidate) => String(candidate[idIndex]).trim() === normalizedTaskId);
+  const row = values.slice(headerRowIndex + 1).find((candidate) => String(candidate[idIndex]).trim() === normalizedTaskId);
   if (!row) throw new Error("Task ID not found. Check the number and try again.");
   const responsibleEmails = String(row[responsibleIndex]).toLowerCase().split(/[,;\n]+/).map((value) => value.trim()).filter(Boolean);
   if (!responsibleEmails.includes(String(email).toLowerCase())) throw new Error("This task is not assigned to your signed-in Navio email.");
