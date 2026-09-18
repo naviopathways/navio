@@ -375,7 +375,7 @@ img, svg { display: block; max-width: 100%; }
 .hero-copy { position: relative; z-index: 4; }
 .hero-copy h1 { max-width: 9.6ch; font-size: clamp(3.75rem, 6.7vw, 6.85rem); }
 .hero-copy h1 > span, .hero-copy h1 > strong { display: block; }
-.hero-copy h1 strong { margin-top: .12em; color: var(--orchid); font-size: .72em; font-weight: 680; letter-spacing: -.062em; line-height: .96; text-shadow: 0 12px 38px rgba(140, 56, 128, .28); }
+.hero-copy h1 strong { margin-top: .12em; padding-bottom: .08em; color: var(--orchid); font-size: .72em; font-weight: 680; letter-spacing: -.062em; line-height: 1.04; text-shadow: 0 12px 38px rgba(140, 56, 128, .28); }
 .letter-word { display: inline-block; white-space: nowrap; }
 .letter-reveal { display: inline-block; opacity: 0; transform: translate3d(0, .58em, 0) rotate(2deg); filter: blur(5px); animation: letter-settle 920ms var(--ease-silk) forwards; animation-delay: calc(170ms + var(--letter-index) * 34ms); will-change: transform, opacity, filter; }
 @keyframes letter-settle { 55% { opacity: 1; } to { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); filter: blur(0); } }
