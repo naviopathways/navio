@@ -470,6 +470,17 @@ if (execGate) {
   });
 
   if (hoursForm) {
+    const validateTimeIncrement = (input) => {
+      if (!input.value) {
+        input.setCustomValidity("");
+        return true;
+      }
+      const [, minute] = input.value.split(":").map(Number);
+      const valid = minute === 0 || minute === 30;
+      input.setCustomValidity(valid ? "" : "Choose a time on the hour or half-hour.");
+      return valid;
+    };
+
     const durationMinutes = () => {
       if (!hoursStart.value || !hoursEnd.value) return 0;
       const [startHour, startMinute] = hoursStart.value.split(":").map(Number);
@@ -478,6 +489,8 @@ if (execGate) {
     };
 
     const updateHoursTotal = () => {
+      validateTimeIncrement(hoursStart);
+      validateTimeIncrement(hoursEnd);
       const minutes = durationMinutes();
       hoursTotal.textContent = minutes > 0 ? `${(minutes / 60).toFixed(2)} hours` : "0.00 hours";
     };
@@ -492,9 +505,9 @@ if (execGate) {
 
       if (!hoursForm.reportValidity()) return;
       const minutes = durationMinutes();
-      if (minutes <= 0 || minutes > 960) {
+      if (minutes < 30 || minutes > 960 || minutes % 30 !== 0) {
         hoursStatus.classList.add("is-error");
-        hoursStatus.textContent = "Enter a time range between 1 minute and 16 hours.";
+        hoursStatus.textContent = "Choose times in 30-minute intervals, with at least 30 minutes between them (maximum 16 hours).";
         hoursEnd.focus();
         return;
       }

@@ -122,7 +122,9 @@ function validateRequest_(parameters, identity) {
   const startMinutes = timeToMinutes_(startTime);
   const endMinutes = timeToMinutes_(endTime);
   const duration = endMinutes - startMinutes;
-  if (duration <= 0 || duration > 960) throw new Error("The time range must be between 1 minute and 16 hours.");
+  if (![startMinutes, endMinutes].every((minutes) => minutes % 30 === 0) || duration < 30 || duration > 960 || duration % 30 !== 0) {
+    throw new Error("Choose times in 30-minute intervals, with at least 30 minutes between them (maximum 16 hours).");
+  }
 
   const task = lookupTask_(taskId, identity.email);
 

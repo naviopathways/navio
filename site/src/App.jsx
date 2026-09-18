@@ -242,8 +242,8 @@ function VolunteerHoursPage() {
               <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output className="hours-total-output" id="hours-total" htmlFor="hours-start hours-end">0.00 hours</output></div>
             </div>
             <div className="hours-fields-two">
-              <div className="hours-field"><label htmlFor="hours-start">Start time</label><input id="hours-start" name="startTime" type="time" required /></div>
-              <div className="hours-field"><label htmlFor="hours-end">End time</label><input id="hours-end" name="endTime" type="time" required /></div>
+              <div className="hours-field"><label htmlFor="hours-start">Start time <span>30-minute intervals</span></label><input id="hours-start" name="startTime" type="time" min="00:00" max="23:30" step="1800" required /></div>
+              <div className="hours-field"><label htmlFor="hours-end">End time <span>30-minute intervals</span></label><input id="hours-end" name="endTime" type="time" min="00:00" max="23:30" step="1800" required /></div>
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-task-id">Task ID</label><input id="hours-task-id" name="taskId" type="number" min="1" step="1" inputMode="numeric" placeholder="Enter the assigned Task ID" required /><p className="hours-task-status" id="hours-task-status" role="status" aria-live="polite" /></div>
