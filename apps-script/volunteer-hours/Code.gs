@@ -1,6 +1,7 @@
 const NAVIO_CLIENT_ID = "83200696643-5s4mukedu7n1kco61m9jpc012lnphp94.apps.googleusercontent.com";
 const NAVIO_DOMAIN = "naviopathways.com";
 const CEO_EMAIL = "sahil.ambegaonkar@naviopathways.com";
+const CEO_CC_EMAIL = "parnish.kaur@naviopathways.com";
 const SHEET_PROPERTY = "VOLUNTEER_HOURS_SHEET_ID";
 const SHEET_NAME = "Volunteer hour requests";
 const HEADERS = [
@@ -147,7 +148,7 @@ function sendCeoReview_(request) {
   const subject = `Approval needed: ${request.name} - ${request.hours.toFixed(2)} volunteer hours`;
   const body = `A volunteer-hours request needs review.\n\nApplicant: ${request.name} <${request.email}>\nRequest: ${request.id}\nDate completed: ${request.date}\nTime: ${request.startTime} - ${request.endTime}\nHours: ${request.hours.toFixed(2)}\nTask: ${request.description}\nNotes: ${request.notes || "None"}\n\nApprove: ${approveUrl}\nNot approve: ${rejectUrl}`;
   const htmlBody = `<p>A volunteer-hours request needs review.</p><table cellpadding="6" cellspacing="0" style="border-collapse:collapse"><tr><td><strong>Applicant</strong></td><td>${escapeHtml_(request.name)} &lt;${escapeHtml_(request.email)}&gt;</td></tr><tr><td><strong>Request</strong></td><td>${escapeHtml_(request.id)}</td></tr><tr><td><strong>Date</strong></td><td>${escapeHtml_(request.date)}</td></tr><tr><td><strong>Time</strong></td><td>${escapeHtml_(request.startTime)} - ${escapeHtml_(request.endTime)} (${request.hours.toFixed(2)} hours)</td></tr><tr><td><strong>Task</strong></td><td>${escapeHtml_(request.description)}</td></tr><tr><td><strong>Notes</strong></td><td>${escapeHtml_(request.notes || "None")}</td></tr></table><p><a href="${approveUrl}" style="display:inline-block;padding:12px 18px;background:#8c3880;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">Approve hours</a>&nbsp;&nbsp;<a href="${rejectUrl}" style="display:inline-block;padding:12px 18px;border:1px solid #777;color:#333;text-decoration:none;border-radius:8px;font-weight:bold">Do not approve</a></p>`;
-  MailApp.sendEmail({ to: CEO_EMAIL, subject, body, htmlBody, name: "Navio Pathways Hours" });
+  MailApp.sendEmail({ to: CEO_EMAIL, cc: CEO_CC_EMAIL, subject, body, htmlBody, name: "Navio Pathways Hours" });
 }
 
 function sendApplicantDecision_(request) {
