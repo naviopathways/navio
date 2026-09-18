@@ -242,6 +242,7 @@ if (execGate) {
   const execDomain = "naviopathways.com";
   const execStorageKey = "navio-exec-account";
   const execTokenStorageKey = "navio-exec-id-token";
+  const execAuthEventKey = "navio-exec-auth-event";
   const volunteerHoursEndpoint = String(window.NAVIO_EXEC_CONFIG?.volunteerHoursEndpoint || "").trim();
   const schoolFormInput = document.querySelector("#hours-school-form");
   if (hoursToolStatus && volunteerHoursEndpoint) hoursToolStatus.textContent = "Active tool";
@@ -260,7 +261,7 @@ if (execGate) {
 
   const readValidExecToken = () => {
     try {
-      const token = sessionStorage.getItem(execTokenStorageKey) || "";
+      const token = localStorage.getItem(execTokenStorageKey) || "";
       const claims = readExecClaims(token);
       const valid = claims.aud === execClientId
         && claims.hd === execDomain
@@ -334,7 +335,7 @@ if (execGate) {
     window.google.accounts.id.initialize({
       client_id: execClientId,
       hd: execDomain,
-      auto_select: false,
+      auto_select: true,
       callback: (response) => {
         try {
           const claims = readExecClaims(response.credential);
@@ -342,7 +343,7 @@ if (execGate) {
           const verified = claims.aud === execClientId && claims.email_verified === true && Number(claims.exp) * 1000 > Date.now() && validExecAccount(account);
           if (!verified) throw new Error("Unapproved account");
           execError.textContent = "";
-          try { sessionStorage.setItem(execTokenStorageKey, response.credential); } catch { /* Session storage may be unavailable. */ }
+          try { localStorage.setItem(execTokenStorageKey, response.credential); } catch { /* Private browsing may block storage. */ }
           openExecDashboard(saveExecAccount(claims));
         } catch {
           execError.textContent = "Use a Google Workspace account managed by naviopathways.com.";
@@ -355,8 +356,26 @@ if (execGate) {
 
   try {
     const savedAccount = JSON.parse(localStorage.getItem(execStorageKey));
-    if (validExecAccount(savedAccount) && (!hoursForm || readValidExecToken())) openExecDashboard(savedAccount);
+    if (validExecAccount(savedAccount) && readValidExecToken()) openExecDashboard(savedAccount);
   } catch { /* The sign-in button remains available. */ }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== execStorageKey && event.key !== execTokenStorageKey && event.key !== execAuthEventKey) return;
+    try {
+      const account = JSON.parse(localStorage.getItem(execStorageKey));
+      const token = readValidExecToken();
+      if (validExecAccount(account) && token) openExecDashboard(account);
+      else {
+        execDashboard.hidden = true;
+        execGate.hidden = false;
+        closeExecAccountMenu();
+        renderExecButton();
+      }
+    } catch {
+      execDashboard.hidden = true;
+      execGate.hidden = false;
+    }
+  });
 
   execAccountTrigger.addEventListener("click", () => {
     const shouldOpen = execAccountPopover.hidden;
@@ -382,7 +401,10 @@ if (execGate) {
 
   execSignOut.addEventListener("click", () => {
     try { localStorage.removeItem(execStorageKey); } catch { /* No storage to clear. */ }
-    try { sessionStorage.removeItem(execTokenStorageKey); } catch { /* No session storage to clear. */ }
+    try {
+      localStorage.removeItem(execTokenStorageKey);
+      localStorage.setItem(execAuthEventKey, String(Date.now()));
+    } catch { /* No storage to clear. */ }
     execDashboard.hidden = true;
     execGate.hidden = false;
     closeExecAccountMenu();
