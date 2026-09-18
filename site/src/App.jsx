@@ -245,7 +245,11 @@ function VolunteerHoursPage() {
               <div className="hours-field"><label htmlFor="hours-start">Start time</label><input id="hours-start" name="startTime" type="time" required /></div>
               <div className="hours-field"><label htmlFor="hours-end">End time</label><input id="hours-end" name="endTime" type="time" required /></div>
             </div>
-            <div className="hours-field"><label htmlFor="hours-description">Task description</label><textarea id="hours-description" name="description" rows="5" maxLength="1000" placeholder="Describe what you completed, who or what it supported, and the outcome." required /></div>
+            <div className="hours-fields-two">
+              <div className="hours-field"><label htmlFor="hours-task-id">Task ID</label><input id="hours-task-id" name="taskId" type="number" min="1" step="1" inputMode="numeric" placeholder="Enter the assigned Task ID" required /><p className="hours-task-status" id="hours-task-status" role="status" aria-live="polite" /></div>
+              <div className="hours-field"><label htmlFor="hours-task-title">Task title</label><output id="hours-task-title" htmlFor="hours-task-id">Enter a Task ID to load the assigned task.</output></div>
+            </div>
+            <div className="hours-field"><label htmlFor="hours-task-description">Task description</label><output id="hours-task-description" htmlFor="hours-task-id">—</output></div>
             <div className="hours-field"><label htmlFor="hours-notes">Additional notes <span>Optional</span></label><textarea id="hours-notes" name="notes" rows="3" maxLength="1000" placeholder="Add a project name, event, supervisor, or other useful context." /></div>
             <div className="hours-field"><label htmlFor="hours-school-form">School form <span>Optional</span></label><input id="hours-school-form" name="schoolForm" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" /><small>Upload the form that needs an executive signature. PDF, Word, or image; 5 MB maximum.</small></div>
             <label className="hours-confirm"><input id="hours-confirm" name="confirmed" type="checkbox" required /><span>I confirm this request is complete and accurate.</span></label>

@@ -235,6 +235,10 @@ if (execGate) {
   const hoursStart = document.querySelector("#hours-start");
   const hoursEnd = document.querySelector("#hours-end");
   const hoursTotal = document.querySelector("#hours-total");
+  const hoursTaskId = document.querySelector("#hours-task-id");
+  const hoursTaskTitle = document.querySelector("#hours-task-title");
+  const hoursTaskDescription = document.querySelector("#hours-task-description");
+  const hoursTaskStatus = document.querySelector("#hours-task-status");
   const hoursSubmit = document.querySelector("#hours-submit");
   const hoursStatus = document.querySelector("#hours-status");
   const hoursToolStatus = document.querySelector("#hours-tool-status");
@@ -246,6 +250,58 @@ if (execGate) {
   const volunteerHoursEndpoint = String(window.NAVIO_EXEC_CONFIG?.volunteerHoursEndpoint || "").trim();
   const schoolFormInput = document.querySelector("#hours-school-form");
   if (hoursToolStatus && volunteerHoursEndpoint) hoursToolStatus.textContent = "Active tool";
+
+  let taskLookupTimer;
+  let taskIsValid = false;
+  const lookupTask = () => {
+    window.clearTimeout(taskLookupTimer);
+    taskIsValid = false;
+    const taskId = String(hoursTaskId?.value || "").trim();
+    if (!taskId) {
+      if (hoursTaskTitle) hoursTaskTitle.textContent = "Enter a Task ID to load the assigned task.";
+      if (hoursTaskDescription) hoursTaskDescription.textContent = "—";
+      if (hoursTaskStatus) hoursTaskStatus.textContent = "";
+      return;
+    }
+    if (!/^\d+$/.test(taskId)) {
+      if (hoursTaskStatus) hoursTaskStatus.textContent = "Task ID must be a number.";
+      return;
+    }
+    const token = readValidExecToken();
+    if (!token) return;
+    if (hoursTaskStatus) hoursTaskStatus.textContent = "Checking task assignment...";
+    taskLookupTimer = window.setTimeout(() => {
+      const callbackName = "__navioTaskLookup";
+      window[callbackName] = (result) => {
+        taskIsValid = Boolean(result?.ok);
+        if (taskIsValid) {
+          hoursTaskTitle.textContent = result.title || "Untitled task";
+          hoursTaskDescription.textContent = result.description || "No description provided.";
+          hoursTaskStatus.textContent = "Task verified and marked Complete.";
+          hoursTaskStatus.className = "hours-task-status is-success";
+        } else {
+          hoursTaskTitle.textContent = "—";
+          hoursTaskDescription.textContent = "—";
+          hoursTaskStatus.textContent = result?.error || "This task could not be verified.";
+          hoursTaskStatus.className = "hours-task-status is-error";
+        }
+        delete window[callbackName];
+        lookupScript.remove();
+      };
+      const lookupScript = document.createElement("script");
+      lookupScript.src = `${volunteerHoursEndpoint}?action=task&taskId=${encodeURIComponent(taskId)}&idToken=${encodeURIComponent(token)}&callback=${callbackName}&_=${Date.now()}`;
+      lookupScript.onerror = () => {
+        taskIsValid = false;
+        hoursTaskStatus.textContent = "The task list could not be checked. Try again.";
+        hoursTaskStatus.className = "hours-task-status is-error";
+        delete window[callbackName];
+        lookupScript.remove();
+      };
+      document.head.append(lookupScript);
+    }, 350);
+  };
+
+  hoursTaskId?.addEventListener("input", lookupTask);
 
   const readExecClaims = (credential) => {
     const payload = credential.split(".")[1];
@@ -441,6 +497,12 @@ if (execGate) {
         hoursEnd.focus();
         return;
       }
+      if (!taskIsValid) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "Verify a Task ID assigned to your email and marked Complete before submitting.";
+        hoursTaskId?.focus();
+        return;
+      }
       if (!volunteerHoursEndpoint) {
         hoursStatus.classList.add("is-error");
         hoursStatus.textContent = "The approval service still needs its deployment URL before requests can be sent.";
@@ -487,7 +549,7 @@ if (execGate) {
         date: String(formData.get("date") || ""),
         startTime: String(formData.get("startTime") || ""),
         endTime: String(formData.get("endTime") || ""),
-        description: String(formData.get("description") || "").trim(),
+        taskId: String(formData.get("taskId") || "").trim(),
         notes: String(formData.get("notes") || "").trim(),
         fileName: schoolFormData.fileName,
         fileType: schoolFormData.fileType,
@@ -502,6 +564,10 @@ if (execGate) {
         await fetch(volunteerHoursEndpoint, { method: "POST", mode: "no-cors", body: payload });
         hoursForm.reset();
         updateHoursTotal();
+        taskIsValid = false;
+        if (hoursTaskTitle) hoursTaskTitle.textContent = "Enter a Task ID to load the assigned task.";
+        if (hoursTaskDescription) hoursTaskDescription.textContent = "—";
+        if (hoursTaskStatus) hoursTaskStatus.textContent = "";
         hoursStatus.classList.add("is-success");
         hoursStatus.textContent = "Request sent. Check your Navio inbox for the confirmation email.";
       } catch {

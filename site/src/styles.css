@@ -809,6 +809,10 @@ img, svg { display: block; max-width: 100%; }
 .hours-field small { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1.45; }
 .hours-field textarea { display: block; min-height: 7rem; resize: vertical; padding: .9rem 1rem; line-height: 1.55; }
 .hours-field output { display: flex; min-height: 3.3rem; align-items: center; padding: 0 1rem; color: var(--orchid); font-weight: 760; }
+.hours-field output[ id="hours-task-description" ] { min-height: 7rem; align-items: flex-start; padding-top: .9rem; padding-bottom: .9rem; color: var(--ink-soft); font-weight: 560; line-height: 1.55; white-space: pre-wrap; }
+.hours-task-status { min-height: 1.25rem; margin: .45rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.4; }
+.hours-task-status.is-error { color: #ffb0c3; }
+.hours-task-status.is-success { color: #b9efcf; }
 .hours-field input:hover, .hours-field select:hover, .hours-field textarea:hover { border-color: rgba(191,102,173,.65); background: var(--midnight); }
 .hours-field input:focus, .hours-field select:focus, .hours-field textarea:focus { outline: 0; border-color: var(--orchid); box-shadow: 0 0 0 4px rgba(191,102,173,.13); transform: translateY(-1px); }
 .hours-field textarea::placeholder { color: rgba(255,255,255,.34); }
