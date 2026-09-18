@@ -746,10 +746,20 @@ img, svg { display: block; max-width: 100%; }
 .exec-shell { width: min(calc(100% - 3rem), var(--container)); margin: 0 auto; padding-bottom: clamp(5rem, 10vw, 8rem); }
 .exec-header { display: flex; min-height: var(--header-height); align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .exec-header .brand-wordmark { width: 10rem; margin: 0; }
-.exec-account { display: flex; align-items: center; gap: .65rem; color: var(--muted); font-size: .73rem; font-weight: 650; }
-.exec-account-dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--orchid); box-shadow: 0 0 0 .3rem rgba(191,102,173,.1); }
-.exec-sign-out { margin-left: .6rem; padding: .48rem .7rem; border: 1px solid var(--line); border-radius: .65rem; background: transparent; color: var(--ink-soft); font-size: .7rem; font-weight: 700; transition: background 450ms var(--ease-soft), border-color 450ms var(--ease-soft), transform 600ms var(--ease-bloom); }
-.exec-sign-out:hover { border-color: rgba(191,102,173,.5); background: var(--plum); transform: translateY(-1px); }
+.exec-account-menu { position: relative; z-index: 10; }
+.exec-account-trigger { display: grid; width: 2.8rem; height: 2.8rem; place-items: center; overflow: hidden; padding: 0; border: 1px solid rgba(191,102,173,.58); border-radius: 50%; background: linear-gradient(145deg, rgba(173,71,148,.92), rgba(82,61,87,.95)); box-shadow: 0 .7rem 1.8rem rgba(0,0,0,.22), inset 0 0 0 3px rgba(255,255,255,.05); color: var(--white); transition: transform 650ms var(--ease-bloom), border-color 550ms var(--ease-soft), box-shadow 650ms var(--ease-silk); }
+.exec-account-trigger:hover, .exec-account-trigger[aria-expanded="true"] { border-color: var(--orchid); box-shadow: 0 .9rem 2.2rem rgba(0,0,0,.3), 0 0 0 4px rgba(191,102,173,.09); transform: translateY(-2px) scale(1.035); }
+.exec-account-trigger img { width: 100%; height: 100%; object-fit: cover; }
+.exec-account-trigger span { font-size: .78rem; font-weight: 780; letter-spacing: .02em; }
+.exec-account-popover[hidden] { display: none !important; }
+.exec-account-popover { position: absolute; top: calc(100% + .85rem); right: 0; display: grid; width: min(18rem, calc(100vw - 2rem)); padding: 1.15rem; border: 1px solid var(--line-strong); border-radius: 1rem 0 1rem 1rem; background: rgba(61,59,71,.96); box-shadow: 0 1.5rem 4rem rgba(0,0,0,.36); backdrop-filter: blur(18px) saturate(125%); -webkit-backdrop-filter: blur(18px) saturate(125%); animation: exec-account-menu-in 520ms var(--ease-silk) both; }
+.exec-account-popover p { margin: 0 0 .45rem; color: var(--orchid); font-size: .62rem; font-weight: 760; letter-spacing: .14em; text-transform: uppercase; }
+.exec-account-popover strong, .exec-account-popover > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exec-account-popover strong { color: var(--white); font-size: .95rem; }
+.exec-account-popover > span { margin-top: .2rem; color: var(--muted); font-size: .74rem; }
+.exec-sign-out { display: flex; min-height: 2.75rem; align-items: center; justify-content: space-between; margin-top: 1rem; padding: 0 .9rem; border: 1px solid var(--line); border-radius: .72rem; background: rgba(56,56,66,.72); color: var(--ink-soft); font-size: .78rem; font-weight: 700; transition: color 450ms var(--ease-soft), background 500ms var(--ease-soft), border-color 500ms var(--ease-soft), transform 600ms var(--ease-bloom); }
+.exec-sign-out:hover { border-color: rgba(191,102,173,.5); background: rgba(82,61,87,.8); color: var(--white); transform: translateY(-1px); }
+@keyframes exec-account-menu-in { from { opacity: 0; transform: translateY(-.55rem) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .exec-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .5fr); align-items: end; gap: 4rem; padding: clamp(5rem, 10vw, 9rem) 0 clamp(3rem, 7vw, 5rem); }
 .exec-intro h1 { max-width: 11ch; margin-bottom: 0; font-size: clamp(3.6rem, 8vw, 7.4rem); }
 .exec-intro > p { max-width: 28rem; margin: 0; padding: 1.2rem 1.35rem; border: 1px solid var(--line); border-radius: 0 1.4rem 1.4rem; background: rgba(61,59,71,.56); color: var(--ink-soft); }
@@ -928,9 +938,7 @@ img, svg { display: block; max-width: 100%; }
   .exec-shell { width: min(calc(100% - 2rem), var(--container)); }
   .exec-header { min-height: 4.7rem; }
   .exec-header .brand-wordmark { width: 8.6rem; height: 2.6rem; }
-  .exec-account { gap: .4rem; font-size: .62rem; }
-  #exec-account-email { display: none; }
-  .exec-sign-out { margin-left: .15rem; }
+  .exec-account-trigger { width: 2.5rem; height: 2.5rem; }
   .exec-intro { padding-top: 3.7rem; }
   .exec-intro h1 { font-size: clamp(3.1rem, 14vw, 5rem); }
   .exec-tool-card { min-height: 22rem; }

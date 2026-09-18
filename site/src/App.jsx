@@ -162,10 +162,17 @@ function ExecPortal() {
       <section className="exec-shell" id="exec-dashboard" aria-labelledby="exec-title" hidden>
         <header className="exec-header">
           <a className="exec-brand" href="/" aria-label="Navio Pathways home"><span className="brand-wordmark" aria-hidden="true" /></a>
-          <div className="exec-account">
-            <span className="exec-account-dot" aria-hidden="true" />
-            <span id="exec-account-email">Navio account</span>
-            <button className="exec-sign-out" id="exec-sign-out" type="button">Sign out <span aria-hidden="true">↗</span></button>
+          <div className="exec-account-menu" id="exec-account-menu">
+            <button className="exec-account-trigger" id="exec-account-trigger" type="button" aria-label="Open account menu" aria-expanded="false" aria-controls="exec-account-popover">
+              <img id="exec-account-avatar" alt="" referrerPolicy="no-referrer" hidden />
+              <span id="exec-account-initials" aria-hidden="true">N</span>
+            </button>
+            <div className="exec-account-popover" id="exec-account-popover" hidden>
+              <p>Signed in as</p>
+              <strong id="exec-account-name">Navio account</strong>
+              <span id="exec-account-email">account@naviopathways.com</span>
+              <button className="exec-sign-out" id="exec-sign-out" type="button">Sign out <span aria-hidden="true">↗</span></button>
+            </div>
           </div>
         </header>
 

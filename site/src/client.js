@@ -220,6 +220,12 @@ if (execGate) {
   const execDashboard = document.querySelector("#exec-dashboard");
   const execError = document.querySelector("#exec-access-error");
   const execGoogleButton = document.querySelector("#exec-google-signin");
+  const execAccountMenu = document.querySelector("#exec-account-menu");
+  const execAccountTrigger = document.querySelector("#exec-account-trigger");
+  const execAccountPopover = document.querySelector("#exec-account-popover");
+  const execAccountAvatar = document.querySelector("#exec-account-avatar");
+  const execAccountInitials = document.querySelector("#exec-account-initials");
+  const execAccountName = document.querySelector("#exec-account-name");
   const execAccountEmail = document.querySelector("#exec-account-email");
   const execSignOut = document.querySelector("#exec-sign-out");
   const execClientId = "83200696643-5s4mukedu7n1kco61m9jpc012lnphp94.apps.googleusercontent.com";
@@ -238,15 +244,41 @@ if (execGate) {
     && String(account?.email || "").toLowerCase().endsWith(`@${execDomain}`)
     && Boolean(account?.sub);
 
+  const execInitials = (name) => String(name || "Navio")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
+  const closeExecAccountMenu = () => {
+    execAccountPopover.hidden = true;
+    execAccountTrigger.setAttribute("aria-expanded", "false");
+  };
+
   const openExecDashboard = (account) => {
+    const name = account.name || account.email?.split("@")[0] || "Navio account";
+    execAccountName.textContent = name;
     execAccountEmail.textContent = account.email;
+    execAccountInitials.textContent = execInitials(name);
+    if (account.picture?.startsWith("https://")) {
+      execAccountAvatar.src = account.picture;
+      execAccountAvatar.alt = `${name} profile picture`;
+      execAccountAvatar.hidden = false;
+      execAccountInitials.hidden = true;
+    } else {
+      execAccountAvatar.removeAttribute("src");
+      execAccountAvatar.hidden = true;
+      execAccountInitials.hidden = false;
+    }
     execGate.hidden = true;
     execDashboard.hidden = false;
     execDashboard.focus?.({ preventScroll: true });
   };
 
   const saveExecAccount = (claims) => {
-    const account = { email: String(claims.email || "").toLowerCase(), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
+    const account = { name: String(claims.name || ""), email: String(claims.email || "").toLowerCase(), picture: String(claims.picture || ""), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
     try { localStorage.setItem(execStorageKey, JSON.stringify(account)); } catch { /* Private browsing may block storage. */ }
     return account;
   };
@@ -272,7 +304,7 @@ if (execGate) {
       callback: (response) => {
         try {
           const claims = readExecClaims(response.credential);
-          const account = { email: String(claims.email || "").toLowerCase(), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
+          const account = { name: String(claims.name || ""), email: String(claims.email || "").toLowerCase(), picture: String(claims.picture || ""), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
           const verified = claims.aud === execClientId && claims.email_verified === true && Number(claims.exp) * 1000 > Date.now() && validExecAccount(account);
           if (!verified) throw new Error("Unapproved account");
           execError.textContent = "";
@@ -291,10 +323,33 @@ if (execGate) {
     if (validExecAccount(savedAccount)) openExecDashboard(savedAccount);
   } catch { /* The sign-in button remains available. */ }
 
+  execAccountTrigger.addEventListener("click", () => {
+    const shouldOpen = execAccountPopover.hidden;
+    execAccountPopover.hidden = !shouldOpen;
+    execAccountTrigger.setAttribute("aria-expanded", String(shouldOpen));
+  });
+
+  execAccountAvatar.addEventListener("error", () => {
+    execAccountAvatar.hidden = true;
+    execAccountInitials.hidden = false;
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!execAccountMenu.contains(event.target)) closeExecAccountMenu();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !execAccountPopover.hidden) {
+      closeExecAccountMenu();
+      execAccountTrigger.focus();
+    }
+  });
+
   execSignOut.addEventListener("click", () => {
     try { localStorage.removeItem(execStorageKey); } catch { /* No storage to clear. */ }
     execDashboard.hidden = true;
     execGate.hidden = false;
+    closeExecAccountMenu();
     window.google?.accounts?.id?.disableAutoSelect();
     renderExecButton();
   });
