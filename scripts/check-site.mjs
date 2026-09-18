@@ -52,7 +52,7 @@ for (const root of roots) {
       errors.push(`${file} links to missing local route ${localPath}`);
     }
   }
-  for (const asset of ["assets/icon/navio-icon.png", "assets/images/navio-logo.png", "assets/images/navio-star-bg.png", "navio-favicon.svg", "google679ac1915f24aeb4.html", "sitemap.xml", "robots.txt", "CNAME", ".nojekyll"]) {
+  for (const asset of ["assets/icon/navio-icon.png", "assets/images/navio-logo.png", "assets/images/navio-star-bg.png", "navio-favicon.svg", "google679ac1915f24aeb4.html", "exec-config.js", "sitemap.xml", "robots.txt", "CNAME", ".nojekyll"]) {
     if (!existsSync(join(root, asset))) errors.push(`${join(root, asset)} is missing`);
   }
 
@@ -93,8 +93,16 @@ for (const root of roots) {
   if (!existsSync(execPage)) errors.push(`${execPage} is missing`);
   else {
     const html = readFileSync(execPage, "utf8");
-    for (const expected of ["Executive tools, in one place.", "Navio executive workspace", "/email-signatures/", "noindex, follow"]) {
+    for (const expected of ["Executive Tools", "/email-signatures/", "/exec/volunteer-hours/", "noindex, follow"]) {
       if (!html.includes(expected)) errors.push(`${execPage} is missing ${expected}`);
+    }
+  }
+  const hoursPage = join(root, "exec/volunteer-hours/index.html");
+  if (!existsSync(hoursPage)) errors.push(`${hoursPage} is missing`);
+  else {
+    const html = readFileSync(hoursPage, "utf8");
+    for (const expected of ["Request hours for approval.", "id=\"volunteer-hours-form\"", "Task description", "Submit for approval", "noindex, follow"]) {
+      if (!html.includes(expected)) errors.push(`${hoursPage} is missing ${expected}`);
     }
   }
   const sitemap = readFileSync(join(root, "sitemap.xml"), "utf8");

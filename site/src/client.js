@@ -228,9 +228,22 @@ if (execGate) {
   const execAccountName = document.querySelector("#exec-account-name");
   const execAccountEmail = document.querySelector("#exec-account-email");
   const execSignOut = document.querySelector("#exec-sign-out");
+  const hoursForm = document.querySelector("#volunteer-hours-form");
+  const hoursApplicantName = document.querySelector("#hours-applicant-name");
+  const hoursApplicantEmail = document.querySelector("#hours-applicant-email");
+  const hoursDate = document.querySelector("#hours-date");
+  const hoursStart = document.querySelector("#hours-start");
+  const hoursEnd = document.querySelector("#hours-end");
+  const hoursTotal = document.querySelector("#hours-total");
+  const hoursSubmit = document.querySelector("#hours-submit");
+  const hoursStatus = document.querySelector("#hours-status");
+  const hoursToolStatus = document.querySelector("#hours-tool-status");
   const execClientId = "83200696643-5s4mukedu7n1kco61m9jpc012lnphp94.apps.googleusercontent.com";
   const execDomain = "naviopathways.com";
   const execStorageKey = "navio-exec-account";
+  const execTokenStorageKey = "navio-exec-id-token";
+  const volunteerHoursEndpoint = String(window.NAVIO_EXEC_CONFIG?.volunteerHoursEndpoint || "").trim();
+  if (hoursToolStatus && volunteerHoursEndpoint) hoursToolStatus.textContent = "Active tool";
 
   const readExecClaims = (credential) => {
     const payload = credential.split(".")[1];
@@ -243,6 +256,20 @@ if (execGate) {
   const validExecAccount = (account) => account?.hd === execDomain
     && String(account?.email || "").toLowerCase().endsWith(`@${execDomain}`)
     && Boolean(account?.sub);
+
+  const readValidExecToken = () => {
+    try {
+      const token = sessionStorage.getItem(execTokenStorageKey) || "";
+      const claims = readExecClaims(token);
+      const valid = claims.aud === execClientId
+        && claims.hd === execDomain
+        && claims.email_verified === true
+        && Number(claims.exp) * 1000 > Date.now();
+      return valid ? token : "";
+    } catch {
+      return "";
+    }
+  };
 
   const execInitials = (name) => String(name || "Navio")
     .trim()
@@ -262,6 +289,12 @@ if (execGate) {
     execAccountName.textContent = name;
     execAccountEmail.textContent = account.email;
     execAccountInitials.textContent = execInitials(name);
+    if (hoursApplicantName) hoursApplicantName.textContent = name;
+    if (hoursApplicantEmail) hoursApplicantEmail.textContent = account.email;
+    if (hoursDate) {
+      const now = new Date();
+      hoursDate.max = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    }
     if (account.picture?.startsWith("https://")) {
       execAccountAvatar.src = account.picture;
       execAccountAvatar.alt = `${name} profile picture`;
@@ -308,6 +341,7 @@ if (execGate) {
           const verified = claims.aud === execClientId && claims.email_verified === true && Number(claims.exp) * 1000 > Date.now() && validExecAccount(account);
           if (!verified) throw new Error("Unapproved account");
           execError.textContent = "";
+          try { sessionStorage.setItem(execTokenStorageKey, response.credential); } catch { /* Session storage may be unavailable. */ }
           openExecDashboard(saveExecAccount(claims));
         } catch {
           execError.textContent = "Use a Google Workspace account managed by naviopathways.com.";
@@ -320,7 +354,7 @@ if (execGate) {
 
   try {
     const savedAccount = JSON.parse(localStorage.getItem(execStorageKey));
-    if (validExecAccount(savedAccount)) openExecDashboard(savedAccount);
+    if (validExecAccount(savedAccount) && (!hoursForm || readValidExecToken())) openExecDashboard(savedAccount);
   } catch { /* The sign-in button remains available. */ }
 
   execAccountTrigger.addEventListener("click", () => {
@@ -347,12 +381,86 @@ if (execGate) {
 
   execSignOut.addEventListener("click", () => {
     try { localStorage.removeItem(execStorageKey); } catch { /* No storage to clear. */ }
+    try { sessionStorage.removeItem(execTokenStorageKey); } catch { /* No session storage to clear. */ }
     execDashboard.hidden = true;
     execGate.hidden = false;
     closeExecAccountMenu();
     window.google?.accounts?.id?.disableAutoSelect();
     renderExecButton();
   });
+
+  if (hoursForm) {
+    const durationMinutes = () => {
+      if (!hoursStart.value || !hoursEnd.value) return 0;
+      const [startHour, startMinute] = hoursStart.value.split(":").map(Number);
+      const [endHour, endMinute] = hoursEnd.value.split(":").map(Number);
+      return (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+    };
+
+    const updateHoursTotal = () => {
+      const minutes = durationMinutes();
+      hoursTotal.textContent = minutes > 0 ? `${(minutes / 60).toFixed(2)} hours` : "0.00 hours";
+    };
+
+    hoursStart.addEventListener("input", updateHoursTotal);
+    hoursEnd.addEventListener("input", updateHoursTotal);
+
+    hoursForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      hoursStatus.className = "hours-status";
+      hoursStatus.textContent = "";
+
+      if (!hoursForm.reportValidity()) return;
+      const minutes = durationMinutes();
+      if (minutes <= 0 || minutes > 960) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "Enter a time range between 1 minute and 16 hours.";
+        hoursEnd.focus();
+        return;
+      }
+      if (!volunteerHoursEndpoint) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "The approval service still needs its deployment URL before requests can be sent.";
+        return;
+      }
+
+      const idToken = readValidExecToken();
+      if (!idToken) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "Your secure session expired. Return to Executive Tools and sign in again.";
+        return;
+      }
+
+      const formData = new FormData(hoursForm);
+      const payload = new URLSearchParams({
+        action: "submit",
+        idToken,
+        date: String(formData.get("date") || ""),
+        startTime: String(formData.get("startTime") || ""),
+        endTime: String(formData.get("endTime") || ""),
+        description: String(formData.get("description") || "").trim(),
+        notes: String(formData.get("notes") || "").trim(),
+        confirmed: "true",
+      });
+
+      hoursSubmit.disabled = true;
+      hoursSubmit.querySelector("span:first-child").textContent = "Submitting request";
+      hoursStatus.textContent = "Sending your request securely...";
+      try {
+        await fetch(volunteerHoursEndpoint, { method: "POST", mode: "no-cors", body: payload });
+        hoursForm.reset();
+        updateHoursTotal();
+        hoursStatus.classList.add("is-success");
+        hoursStatus.textContent = "Request sent. Check your Navio inbox for the confirmation email.";
+      } catch {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "The request could not be sent. Check your connection and try again.";
+      } finally {
+        hoursSubmit.disabled = false;
+        hoursSubmit.querySelector("span:first-child").textContent = "Submit for approval";
+      }
+    });
+  }
 
   const googleScript = document.createElement("script");
   googleScript.src = "https://accounts.google.com/gsi/client";

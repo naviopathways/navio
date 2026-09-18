@@ -142,46 +142,54 @@ function LinkPage() {
   );
 }
 
+function ExecGate({ description = "Sign in with your Navio Pathways Google Workspace account to access executive tools and internal utilities." }) {
+  return (
+    <section className="exec-gate" id="exec-access-gate" aria-labelledby="exec-access-title">
+      <div className="exec-gate-panel">
+        <a className="exec-brand" href="/" aria-label="Navio Pathways home"><span className="brand-wordmark" aria-hidden="true" /></a>
+        <p className="eyebrow">Restricted workspace</p>
+        <h1 id="exec-access-title">Executive tools, in one place.</h1>
+        <p>{description}</p>
+        <div className="exec-google-auth">
+          <div id="exec-google-signin" aria-label="Sign in with Google" />
+          <p className="exec-access-error" id="exec-access-error" role="alert" aria-live="polite" />
+        </div>
+        <p className="exec-gate-note">Only naviopathways.com accounts can continue.</p>
+      </div>
+    </section>
+  );
+}
+
+function ExecHeader() {
+  return (
+    <header className="exec-header">
+      <a className="exec-brand" href="/exec/" aria-label="Executive tools home"><span className="brand-wordmark" aria-hidden="true" /></a>
+      <div className="exec-account-menu" id="exec-account-menu">
+        <button className="exec-account-trigger" id="exec-account-trigger" type="button" aria-label="Open account menu" aria-expanded="false" aria-controls="exec-account-popover">
+          <img id="exec-account-avatar" alt="" referrerPolicy="no-referrer" hidden />
+          <span id="exec-account-initials" aria-hidden="true">N</span>
+        </button>
+        <div className="exec-account-popover" id="exec-account-popover" hidden>
+          <p>Signed in as</p>
+          <strong id="exec-account-name">Navio account</strong>
+          <span id="exec-account-email">account@naviopathways.com</span>
+          <button className="exec-sign-out" id="exec-sign-out" type="button">Sign out <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 function ExecPortal() {
   return (
-    <main className="exec-portal" id="main-content">
-      <section className="exec-gate" id="exec-access-gate" aria-labelledby="exec-access-title">
-        <div className="exec-gate-panel">
-          <a className="exec-brand" href="/" aria-label="Navio Pathways home"><span className="brand-wordmark" aria-hidden="true" /></a>
-          <p className="eyebrow">Restricted workspace</p>
-          <h1 id="exec-access-title">Executive tools, in one place.</h1>
-          <p>Sign in with your Navio Pathways Google Workspace account to access executive tools and internal utilities.</p>
-          <div className="exec-google-auth">
-            <div id="exec-google-signin" aria-label="Sign in with Google" />
-            <p className="exec-access-error" id="exec-access-error" role="alert" aria-live="polite" />
-          </div>
-          <p className="exec-gate-note">Only naviopathways.com accounts can continue.</p>
-        </div>
-      </section>
+    <main className="exec-portal exec-auth-page" id="main-content">
+      <ExecGate />
 
       <section className="exec-shell" id="exec-dashboard" aria-labelledby="exec-title" hidden>
-        <header className="exec-header">
-          <a className="exec-brand" href="/" aria-label="Navio Pathways home"><span className="brand-wordmark" aria-hidden="true" /></a>
-          <div className="exec-account-menu" id="exec-account-menu">
-            <button className="exec-account-trigger" id="exec-account-trigger" type="button" aria-label="Open account menu" aria-expanded="false" aria-controls="exec-account-popover">
-              <img id="exec-account-avatar" alt="" referrerPolicy="no-referrer" hidden />
-              <span id="exec-account-initials" aria-hidden="true">N</span>
-            </button>
-            <div className="exec-account-popover" id="exec-account-popover" hidden>
-              <p>Signed in as</p>
-              <strong id="exec-account-name">Navio account</strong>
-              <span id="exec-account-email">account@naviopathways.com</span>
-              <button className="exec-sign-out" id="exec-sign-out" type="button">Sign out <span aria-hidden="true">↗</span></button>
-            </div>
-          </div>
-        </header>
+        <ExecHeader />
 
         <div className="exec-intro">
-          <div>
-            <p className="eyebrow">Navio executive workspace</p>
-            <h1 id="exec-title">The tools behind the work.</h1>
-          </div>
-          <p>Use these internal utilities to keep executive communications clear, consistent, and ready to send.</p>
+          <h1 id="exec-title">Executive Tools</h1>
         </div>
 
         <section className="exec-tools" aria-label="Executive tools">
@@ -194,11 +202,66 @@ function ExecPortal() {
             </div>
             <strong>Open tool <span aria-hidden="true">↗</span></strong>
           </a>
-          <div className="exec-ready-card">
-            <span aria-hidden="true">✦</span>
-            <p><strong>Built to grow.</strong> New executive tools can be added here as Navio needs them.</p>
-          </div>
+          <a className="exec-tool-card exec-tool-hours" href="/exec/volunteer-hours/">
+            <div className="exec-tool-top"><span>02</span><small id="hours-tool-status">Setup required</small></div>
+            <div>
+              <p className="eyebrow">Operations</p>
+              <h2>Volunteer hour tracking</h2>
+              <p>Submit completed volunteer work for review and receive an email when the request is approved.</p>
+            </div>
+            <strong>Request hours <span aria-hidden="true">↗</span></strong>
+          </a>
         </section>
+      </section>
+    </main>
+  );
+}
+
+function VolunteerHoursPage() {
+  return (
+    <main className="exec-portal exec-auth-page exec-hours-page" id="main-content">
+      <ExecGate description="Sign in with your Navio Pathways Google Workspace account to submit volunteer hours for approval." />
+      <section className="exec-shell exec-hours-shell" id="exec-dashboard" aria-labelledby="hours-title" hidden>
+        <ExecHeader />
+        <div className="hours-intro">
+          <a className="hours-back" href="/exec/"><span aria-hidden="true">←</span> Executive Tools</a>
+          <p className="eyebrow">Volunteer hour tracking</p>
+          <h1 id="hours-title">Request hours for approval.</h1>
+          <p>Record completed work accurately. You and the CEO will receive email confirmations as the request moves through review.</p>
+        </div>
+
+        <div className="hours-layout">
+          <form className="hours-form" id="volunteer-hours-form" noValidate>
+            <div className="hours-form-heading"><span>01</span><div><h2>Work details</h2><p>All fields marked required must describe work you have already completed.</p></div></div>
+            <div className="hours-applicant">
+              <div><small>Applicant</small><strong id="hours-applicant-name">Navio executive</strong></div>
+              <div><small>Workspace email</small><strong id="hours-applicant-email">account@naviopathways.com</strong></div>
+            </div>
+            <div className="hours-fields-two">
+              <div className="hours-field"><label htmlFor="hours-date">Date completed</label><input id="hours-date" name="date" type="date" required /></div>
+              <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output id="hours-total" htmlFor="hours-start hours-end">0.00 hours</output></div>
+            </div>
+            <div className="hours-fields-two">
+              <div className="hours-field"><label htmlFor="hours-start">Start time</label><input id="hours-start" name="startTime" type="time" required /></div>
+              <div className="hours-field"><label htmlFor="hours-end">End time</label><input id="hours-end" name="endTime" type="time" required /></div>
+            </div>
+            <div className="hours-field"><label htmlFor="hours-description">Task description</label><textarea id="hours-description" name="description" rows="5" maxLength="1000" placeholder="Describe what you completed, who or what it supported, and the outcome." required /></div>
+            <div className="hours-field"><label htmlFor="hours-notes">Additional notes <span>Optional</span></label><textarea id="hours-notes" name="notes" rows="3" maxLength="1000" placeholder="Add a project name, event, supervisor, or other useful context." /></div>
+            <label className="hours-confirm"><input id="hours-confirm" name="confirmed" type="checkbox" required /><span>I confirm this request is complete and accurate.</span></label>
+            <button className="hours-submit" id="hours-submit" type="submit"><span>Submit for approval</span><span aria-hidden="true">↗</span></button>
+            <p className="hours-status" id="hours-status" role="status" aria-live="polite" />
+          </form>
+
+          <aside className="hours-process" aria-labelledby="process-title">
+            <p className="eyebrow">What happens next</p>
+            <h2 id="process-title">A clear review trail.</h2>
+            <ol>
+              <li><span>01</span><div><strong>Request received</strong><p>A confirmation is sent to your Navio email.</p></div></li>
+              <li><span>02</span><div><strong>CEO review</strong><p>The request is sent to Sahil Ambegaonkar for approval.</p></div></li>
+              <li><span>03</span><div><strong>Decision recorded</strong><p>You receive the approval decision and next steps by email.</p></div></li>
+            </ol>
+          </aside>
+        </div>
       </section>
     </main>
   );
@@ -209,5 +272,6 @@ export function App({ path = "/" }) {
   const page = getPage(normalizedPath);
   if (normalizedPath === "/links/") return <LinkPage />;
   if (normalizedPath === "/exec/") return <ExecPortal />;
+  if (normalizedPath === "/exec/volunteer-hours/") return <VolunteerHoursPage />;
   return <><Header path={normalizedPath} /><PageContent page={page} /><Footer /></>;
 }

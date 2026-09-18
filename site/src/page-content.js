@@ -138,6 +138,14 @@ export const pageContent = {
     html: `<section><h1>Navio Pathways executive tools</h1></section>`,
   },
 
+  "/exec/volunteer-hours/": {
+    path: "/exec/volunteer-hours/",
+    title: "Volunteer hour tracking | Navio Pathways",
+    description: "Restricted Navio Pathways volunteer-hour request and approval tool.",
+    noindex: true,
+    html: `<section><h1>Volunteer hour tracking</h1></section>`,
+  },
+
   "/404.html": {
     path: "/404.html",
     title: "Page not found | Navio Pathways",
