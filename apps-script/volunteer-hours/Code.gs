@@ -2,12 +2,13 @@ const NAVIO_CLIENT_ID = "83200696643-5s4mukedu7n1kco61m9jpc012lnphp94.apps.googl
 const NAVIO_DOMAIN = "naviopathways.com";
 const CEO_EMAIL = "sahil.ambegaonkar@naviopathways.com";
 const CEO_CC_EMAIL = "parnish.kaur@naviopathways.com";
+const LEADERSHIP_CHANNEL_EMAIL_PROPERTY = "LEADERSHIP_CHANNEL_EMAIL";
 const SHEET_PROPERTY = "VOLUNTEER_HOURS_SHEET_ID";
 const SHEET_NAME = "Volunteer hour requests";
 const HEADERS = [
   "Request ID", "Submitted", "Applicant name", "Applicant email", "Date completed",
   "Start time", "End time", "Hours", "Task description", "Additional notes",
-  "Status", "Approval token", "Decision date",
+  "Status", "Approval token", "Decision date", "Signature requested from", "School form",
 ];
 
 function doPost(event) {
@@ -19,10 +20,11 @@ function doPost(event) {
     sheet.appendRow([
       request.id, new Date(), request.name, request.email, request.date,
       request.startTime, request.endTime, request.hours, request.description, request.notes,
-      "Pending", request.approvalToken, "",
+      "Pending", request.approvalToken, "", request.signatureRequestedFrom, request.schoolFormUrl,
     ]);
     sendApplicantConfirmation_(request);
     sendCeoReview_(request);
+    sendLeadershipNotification_(request);
     return json_({ ok: true, requestId: request.id });
   } catch (error) {
     console.error(error);
@@ -86,10 +88,17 @@ function validateRequest_(parameters, identity) {
   const endTime = String(parameters.endTime || "");
   const description = String(parameters.description || "").trim();
   const notes = String(parameters.notes || "").trim();
+  const signatureRequestedFrom = String(parameters.signatureRequestedFrom || "CEO").trim();
   if (String(parameters.confirmed || "") !== "true") throw new Error("Confirm that the request is complete and accurate.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Enter a valid completion date.");
   if (!/^\d{2}:\d{2}$/.test(startTime) || !/^\d{2}:\d{2}$/.test(endTime)) throw new Error("Enter valid start and end times.");
   if (!description || description.length > 1000 || notes.length > 1000) throw new Error("Review the task description and notes.");
+  if (!["CEO", "CEVP", "CEO and CEVP"].includes(signatureRequestedFrom)) throw new Error("Choose a valid signature recipient.");
+
+  const fileName = String(parameters.fileName || "").trim();
+  const fileType = String(parameters.fileType || "").trim();
+  const fileData = String(parameters.fileData || "").trim();
+  if (fileData && (!fileName || fileData.length > 7 * 1024 * 1024)) throw new Error("The school form is missing or too large.");
 
   const completed = new Date(`${date}T12:00:00`);
   const today = Utilities.formatDate(new Date(), "America/Toronto", "yyyy-MM-dd");
@@ -99,6 +108,7 @@ function validateRequest_(parameters, identity) {
   const duration = endMinutes - startMinutes;
   if (duration <= 0 || duration > 960) throw new Error("The time range must be between 1 minute and 16 hours.");
 
+  const schoolForm = fileData ? saveSchoolForm_(fileName, fileType, fileData) : null;
   return {
     id: `NVH-${Utilities.formatDate(new Date(), "America/Toronto", "yyyyMMdd")}-${Utilities.getUuid().slice(0, 8).toUpperCase()}`,
     approvalToken: Utilities.getUuid().replace(/-/g, "") + Utilities.getUuid().replace(/-/g, ""),
@@ -110,7 +120,19 @@ function validateRequest_(parameters, identity) {
     hours: duration / 60,
     description,
     notes,
+    signatureRequestedFrom,
+    schoolFormUrl: schoolForm ? schoolForm.url : "",
+    schoolFormBlob: schoolForm ? schoolForm.blob : null,
   };
+}
+
+function saveSchoolForm_(fileName, fileType, fileData) {
+  const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120) || "school-signature-form";
+  const bytes = Utilities.base64Decode(fileData);
+  if (bytes.length > 5 * 1024 * 1024) throw new Error("The school form must be 5 MB or smaller.");
+  const blob = Utilities.newBlob(bytes, fileType || "application/octet-stream", safeName);
+  const file = DriveApp.createFile(blob);
+  return { blob, url: file.getUrl() };
 }
 
 function getRequestSheet_() {
@@ -130,6 +152,10 @@ function getRequestSheet_() {
     sheet.appendRow(HEADERS);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold").setBackground("#523d57").setFontColor("#ffffff");
+  } else if (sheet.getLastColumn() < HEADERS.length) {
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold").setBackground("#523d57").setFontColor("#ffffff");
   }
   return sheet;
 }
@@ -137,7 +163,7 @@ function getRequestSheet_() {
 function sendApplicantConfirmation_(request) {
   const subject = `Volunteer hours request received - ${request.id}`;
   const body = `Hi ${request.name},\n\nYour volunteer-hours request has been received and sent to Sahil Ambegaonkar for review.\n\nRequest: ${request.id}\nDate completed: ${request.date}\nTime: ${request.startTime} - ${request.endTime}\nHours requested: ${request.hours.toFixed(2)}\nTask: ${request.description}\n\nYou will receive another email when a decision is recorded. No further action is needed right now.\n\nNavio Pathways`;
-  MailApp.sendEmail({ to: request.email, subject, body, name: "Navio Pathways" });
+  MailApp.sendEmail({ to: request.email, subject, body, name: "Navio Pathways", attachments: request.schoolFormBlob ? [request.schoolFormBlob] : [] });
 }
 
 function sendCeoReview_(request) {
@@ -146,9 +172,18 @@ function sendCeoReview_(request) {
   const approveUrl = `${serviceUrl}?action=approve&token=${encodeURIComponent(request.approvalToken)}`;
   const rejectUrl = `${serviceUrl}?action=reject&token=${encodeURIComponent(request.approvalToken)}`;
   const subject = `Approval needed: ${request.name} - ${request.hours.toFixed(2)} volunteer hours`;
-  const body = `A volunteer-hours request needs review.\n\nApplicant: ${request.name} <${request.email}>\nRequest: ${request.id}\nDate completed: ${request.date}\nTime: ${request.startTime} - ${request.endTime}\nHours: ${request.hours.toFixed(2)}\nTask: ${request.description}\nNotes: ${request.notes || "None"}\n\nApprove: ${approveUrl}\nNot approve: ${rejectUrl}`;
-  const htmlBody = `<p>A volunteer-hours request needs review.</p><table cellpadding="6" cellspacing="0" style="border-collapse:collapse"><tr><td><strong>Applicant</strong></td><td>${escapeHtml_(request.name)} &lt;${escapeHtml_(request.email)}&gt;</td></tr><tr><td><strong>Request</strong></td><td>${escapeHtml_(request.id)}</td></tr><tr><td><strong>Date</strong></td><td>${escapeHtml_(request.date)}</td></tr><tr><td><strong>Time</strong></td><td>${escapeHtml_(request.startTime)} - ${escapeHtml_(request.endTime)} (${request.hours.toFixed(2)} hours)</td></tr><tr><td><strong>Task</strong></td><td>${escapeHtml_(request.description)}</td></tr><tr><td><strong>Notes</strong></td><td>${escapeHtml_(request.notes || "None")}</td></tr></table><p><a href="${approveUrl}" style="display:inline-block;padding:12px 18px;background:#8c3880;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">Approve hours</a>&nbsp;&nbsp;<a href="${rejectUrl}" style="display:inline-block;padding:12px 18px;border:1px solid #777;color:#333;text-decoration:none;border-radius:8px;font-weight:bold">Do not approve</a></p>`;
-  MailApp.sendEmail({ to: CEO_EMAIL, cc: CEO_CC_EMAIL, subject, body, htmlBody, name: "Navio Pathways Hours" });
+  const formLine = request.schoolFormUrl ? `School form: ${request.schoolFormUrl}` : "School form: None attached";
+  const body = `A volunteer-hours request needs review.\n\nApplicant: ${request.name} <${request.email}>\nRequest: ${request.id}\nDate completed: ${request.date}\nTime: ${request.startTime} - ${request.endTime}\nHours: ${request.hours.toFixed(2)}\nTask: ${request.description}\nNotes: ${request.notes || "None"}\nSignature requested from: ${request.signatureRequestedFrom}\n${formLine}\n\nApprove: ${approveUrl}\nNot approve: ${rejectUrl}`;
+  const htmlBody = `<p>A volunteer-hours request needs review.</p><table cellpadding="6" cellspacing="0" style="border-collapse:collapse"><tr><td><strong>Applicant</strong></td><td>${escapeHtml_(request.name)} &lt;${escapeHtml_(request.email)}&gt;</td></tr><tr><td><strong>Request</strong></td><td>${escapeHtml_(request.id)}</td></tr><tr><td><strong>Date</strong></td><td>${escapeHtml_(request.date)}</td></tr><tr><td><strong>Time</strong></td><td>${escapeHtml_(request.startTime)} - ${escapeHtml_(request.endTime)} (${request.hours.toFixed(2)} hours)</td></tr><tr><td><strong>Task</strong></td><td>${escapeHtml_(request.description)}</td></tr><tr><td><strong>Notes</strong></td><td>${escapeHtml_(request.notes || "None")}</td></tr><tr><td><strong>Signature requested from</strong></td><td>${escapeHtml_(request.signatureRequestedFrom)}</td></tr></table><p>${request.schoolFormBlob ? "The requested school form is attached." : "No school form was attached."}</p><p><a href="${approveUrl}" style="display:inline-block;padding:12px 18px;background:#8c3880;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">Approve hours</a>&nbsp;&nbsp;<a href="${rejectUrl}" style="display:inline-block;padding:12px 18px;border:1px solid #777;color:#333;text-decoration:none;border-radius:8px;font-weight:bold">Do not approve</a></p>`;
+  MailApp.sendEmail({ to: CEO_EMAIL, cc: CEO_CC_EMAIL, subject, body, htmlBody, name: "Navio Pathways Hours", attachments: request.schoolFormBlob ? [request.schoolFormBlob] : [] });
+}
+
+function sendLeadershipNotification_(request) {
+  const leadershipChannelEmail = PropertiesService.getScriptProperties().getProperty(LEADERSHIP_CHANNEL_EMAIL_PROPERTY);
+  if (!leadershipChannelEmail) throw new Error("The leadership Slack channel email is not configured.");
+  const subject = `Volunteer hours request: ${request.name} - ${request.hours.toFixed(2)} hours`;
+  const body = `New volunteer-hours request for leadership review.\n\nApplicant: ${request.name} <${request.email}>\nRequest: ${request.id}\nDate: ${request.date}\nTime: ${request.startTime} - ${request.endTime}\nHours: ${request.hours.toFixed(2)}\nTask: ${request.description}\nNotes: ${request.notes || "None"}\nSignature requested from: ${request.signatureRequestedFrom}\n\nThe full approval email has been sent to Sahil with Parnish CC'd.`;
+  MailApp.sendEmail({ to: leadershipChannelEmail, subject, body, name: "Navio Pathways Hours", attachments: request.schoolFormBlob ? [request.schoolFormBlob] : [] });
 }
 
 function sendApplicantDecision_(request) {

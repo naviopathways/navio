@@ -243,6 +243,7 @@ if (execGate) {
   const execStorageKey = "navio-exec-account";
   const execTokenStorageKey = "navio-exec-id-token";
   const volunteerHoursEndpoint = String(window.NAVIO_EXEC_CONFIG?.volunteerHoursEndpoint || "").trim();
+  const schoolFormInput = document.querySelector("#hours-school-form");
   if (hoursToolStatus && volunteerHoursEndpoint) hoursToolStatus.textContent = "Active tool";
 
   const readExecClaims = (credential) => {
@@ -432,6 +433,32 @@ if (execGate) {
       }
 
       const formData = new FormData(hoursForm);
+      const schoolForm = schoolFormInput?.files?.[0] || null;
+      if (schoolForm && schoolForm.size > 5 * 1024 * 1024) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = "The school form must be 5 MB or smaller.";
+        schoolFormInput.focus();
+        return;
+      }
+      let schoolFormData = { fileName: "", fileType: "", fileData: "" };
+      try {
+        if (schoolForm) {
+          schoolFormData = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({
+              fileName: schoolForm.name,
+              fileType: schoolForm.type || "application/octet-stream",
+              fileData: String(reader.result || "").split(",")[1] || "",
+            });
+            reader.onerror = () => reject(new Error("The school form could not be read."));
+            reader.readAsDataURL(schoolForm);
+          });
+        }
+      } catch (error) {
+        hoursStatus.classList.add("is-error");
+        hoursStatus.textContent = error.message || "The school form could not be read.";
+        return;
+      }
       const payload = new URLSearchParams({
         action: "submit",
         idToken,
@@ -440,6 +467,10 @@ if (execGate) {
         endTime: String(formData.get("endTime") || ""),
         description: String(formData.get("description") || "").trim(),
         notes: String(formData.get("notes") || "").trim(),
+        signatureRequestedFrom: String(formData.get("signatureRequestedFrom") || "CEO"),
+        fileName: schoolFormData.fileName,
+        fileType: schoolFormData.fileType,
+        fileData: schoolFormData.fileData,
         confirmed: "true",
       });
 

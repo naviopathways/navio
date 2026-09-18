@@ -802,12 +802,15 @@ img, svg { display: block; max-width: 100%; }
 .hours-field { margin-bottom: 1.25rem; }
 .hours-field label { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; color: var(--ink-soft); font-size: .76rem; font-weight: 720; }
 .hours-field label span { color: var(--muted); font-size: .64rem; font-weight: 600; }
-.hours-field input, .hours-field textarea, .hours-field output { width: 100%; border: 1px solid var(--line-strong); border-radius: .85rem; background: rgba(56,56,66,.9); color: var(--white); transition: border-color 500ms var(--ease-soft), box-shadow 600ms var(--ease-soft), transform 650ms var(--ease-bloom), background 500ms var(--ease-soft); }
+.hours-field input, .hours-field select, .hours-field textarea, .hours-field output { width: 100%; border: 1px solid var(--line-strong); border-radius: .85rem; background: rgba(56,56,66,.9); color: var(--white); transition: border-color 500ms var(--ease-soft), box-shadow 600ms var(--ease-soft), transform 650ms var(--ease-bloom), background 500ms var(--ease-soft); }
 .hours-field input { min-height: 3.3rem; padding: 0 1rem; color-scheme: dark; }
+.hours-field select { min-height: 3.3rem; padding: 0 1rem; color-scheme: dark; }
+.hours-field input[type="file"] { height: auto; padding: .8rem 1rem; }
+.hours-field small { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1.45; }
 .hours-field textarea { display: block; min-height: 7rem; resize: vertical; padding: .9rem 1rem; line-height: 1.55; }
 .hours-field output { display: flex; min-height: 3.3rem; align-items: center; padding: 0 1rem; color: var(--orchid); font-weight: 760; }
-.hours-field input:hover, .hours-field textarea:hover { border-color: rgba(191,102,173,.65); background: var(--midnight); }
-.hours-field input:focus, .hours-field textarea:focus { outline: 0; border-color: var(--orchid); box-shadow: 0 0 0 4px rgba(191,102,173,.13); transform: translateY(-1px); }
+.hours-field input:hover, .hours-field select:hover, .hours-field textarea:hover { border-color: rgba(191,102,173,.65); background: var(--midnight); }
+.hours-field input:focus, .hours-field select:focus, .hours-field textarea:focus { outline: 0; border-color: var(--orchid); box-shadow: 0 0 0 4px rgba(191,102,173,.13); transform: translateY(-1px); }
 .hours-field textarea::placeholder { color: rgba(255,255,255,.34); }
 .hours-confirm { display: flex; align-items: flex-start; gap: .7rem; margin: .25rem 0 1.35rem; color: var(--muted); font-size: .76rem; }
 .hours-confirm input { width: 1rem; height: 1rem; margin-top: .22rem; accent-color: var(--fuchsia); }

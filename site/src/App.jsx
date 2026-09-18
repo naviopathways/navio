@@ -227,7 +227,7 @@ function VolunteerHoursPage() {
           <a className="hours-back" href="/exec/"><span aria-hidden="true">←</span> Executive Tools</a>
           <p className="eyebrow">Volunteer hour tracking</p>
           <h1 id="hours-title">Request hours for approval.</h1>
-          <p>Record completed work accurately. You and the CEO will receive email confirmations as the request moves through review.</p>
+          <p>Record completed work accurately. You’ll receive email confirmations as the request moves through review.</p>
         </div>
 
         <div className="hours-layout">
@@ -247,6 +247,10 @@ function VolunteerHoursPage() {
             </div>
             <div className="hours-field"><label htmlFor="hours-description">Task description</label><textarea id="hours-description" name="description" rows="5" maxLength="1000" placeholder="Describe what you completed, who or what it supported, and the outcome." required /></div>
             <div className="hours-field"><label htmlFor="hours-notes">Additional notes <span>Optional</span></label><textarea id="hours-notes" name="notes" rows="3" maxLength="1000" placeholder="Add a project name, event, supervisor, or other useful context." /></div>
+            <div className="hours-fields-two">
+              <div className="hours-field"><label htmlFor="hours-signature-request">Signature requested from <span>Optional</span></label><select id="hours-signature-request" name="signatureRequestedFrom"><option value="CEO">CEO — Sahil Ambegaonkar</option><option value="CEVP">CEVP — Parnish Kaur</option><option value="CEO and CEVP">CEO and CEVP</option></select></div>
+              <div className="hours-field"><label htmlFor="hours-school-form">School form <span>Optional</span></label><input id="hours-school-form" name="schoolForm" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" /><small>Upload the form that needs an executive signature. PDF, Word, or image; 5 MB maximum.</small></div>
+            </div>
             <label className="hours-confirm"><input id="hours-confirm" name="confirmed" type="checkbox" required /><span>I confirm this request is complete and accurate.</span></label>
             <button className="hours-submit" id="hours-submit" type="submit"><span>Submit for approval</span><span aria-hidden="true">↗</span></button>
             <p className="hours-status" id="hours-status" role="status" aria-live="polite" />
@@ -257,7 +261,7 @@ function VolunteerHoursPage() {
             <h2 id="process-title">A clear review trail.</h2>
             <ol>
               <li><span>01</span><div><strong>Request received</strong><p>A confirmation is sent to your Navio email.</p></div></li>
-              <li><span>02</span><div><strong>CEO review</strong><p>The request is sent to Sahil Ambegaonkar for approval.</p></div></li>
+              <li><span>02</span><div><strong>Leadership review</strong><p>The selected executive receives the request and any attached school form.</p></div></li>
               <li><span>03</span><div><strong>Decision recorded</strong><p>You receive the approval decision and next steps by email.</p></div></li>
             </ol>
           </aside>
