@@ -89,8 +89,16 @@ for (const root of roots) {
       if (!signatureScript.includes(expected)) errors.push(`${join(signatureRoot, "script.js")} is missing ${expected}`);
     }
   }
+  const execPage = join(root, "exec/index.html");
+  if (!existsSync(execPage)) errors.push(`${execPage} is missing`);
+  else {
+    const html = readFileSync(execPage, "utf8");
+    for (const expected of ["Executive tools, in one place.", "Navio executive workspace", "/email-signatures/", "noindex, follow"]) {
+      if (!html.includes(expected)) errors.push(`${execPage} is missing ${expected}`);
+    }
+  }
   const sitemap = readFileSync(join(root, "sitemap.xml"), "utf8");
-  if (sitemap.includes("email-signatures")) errors.push(`${join(root, "sitemap.xml")} exposes the private email signature utility`);
+  if (sitemap.includes("email-signatures") || sitemap.includes("/exec/")) errors.push(`${join(root, "sitemap.xml")} exposes a private utility`);
 }
 
 if (errors.length) {

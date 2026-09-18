@@ -130,6 +130,14 @@ export const pageContent = {
     html: `<section><h1>Navio Pathways links</h1><p>Explore Navio programs and connect with Navio Pathways through official channels.</p></section>`,
   },
 
+  "/exec/": {
+    path: "/exec/",
+    title: "Executive tools | Navio Pathways",
+    description: "Restricted Navio Pathways executive workspace.",
+    noindex: true,
+    html: `<section><h1>Navio Pathways executive tools</h1></section>`,
+  },
+
   "/404.html": {
     path: "/404.html",
     title: "Page not found | Navio Pathways",

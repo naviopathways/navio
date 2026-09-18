@@ -214,3 +214,96 @@ if (/^G-[A-Z0-9]+$/.test(measurementId || "")) {
   analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
   document.head.append(analyticsScript);
 }
+
+const execGate = document.querySelector("#exec-access-gate");
+if (execGate) {
+  const execDashboard = document.querySelector("#exec-dashboard");
+  const execError = document.querySelector("#exec-access-error");
+  const execGoogleButton = document.querySelector("#exec-google-signin");
+  const execAccountEmail = document.querySelector("#exec-account-email");
+  const execSignOut = document.querySelector("#exec-sign-out");
+  const execClientId = "83200696643-5s4mukedu7n1kco61m9jpc012lnphp94.apps.googleusercontent.com";
+  const execDomain = "naviopathways.com";
+  const execStorageKey = "navio-exec-account";
+
+  const readExecClaims = (credential) => {
+    const payload = credential.split(".")[1];
+    if (!payload) throw new Error("Missing Google credential payload");
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    return JSON.parse(atob(padded));
+  };
+
+  const validExecAccount = (account) => account?.hd === execDomain
+    && String(account?.email || "").toLowerCase().endsWith(`@${execDomain}`)
+    && Boolean(account?.sub);
+
+  const openExecDashboard = (account) => {
+    execAccountEmail.textContent = account.email;
+    execGate.hidden = true;
+    execDashboard.hidden = false;
+    execDashboard.focus?.({ preventScroll: true });
+  };
+
+  const saveExecAccount = (claims) => {
+    const account = { email: String(claims.email || "").toLowerCase(), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
+    try { localStorage.setItem(execStorageKey, JSON.stringify(account)); } catch { /* Private browsing may block storage. */ }
+    return account;
+  };
+
+  const renderExecButton = () => {
+    if (!window.google?.accounts?.id) return;
+    execGoogleButton.replaceChildren();
+    window.google.accounts.id.renderButton(execGoogleButton, {
+      type: "standard", theme: "filled_black", size: "large", text: "signin_with", shape: "pill", logo_alignment: "left",
+      width: Math.min(360, Math.max(240, execGoogleButton.clientWidth || 320)),
+    });
+  };
+
+  const initializeExecSignIn = () => {
+    if (!window.google?.accounts?.id) {
+      execError.textContent = "Google sign-in could not load. Check your connection and refresh the page.";
+      return;
+    }
+    window.google.accounts.id.initialize({
+      client_id: execClientId,
+      hd: execDomain,
+      auto_select: false,
+      callback: (response) => {
+        try {
+          const claims = readExecClaims(response.credential);
+          const account = { email: String(claims.email || "").toLowerCase(), hd: String(claims.hd || ""), sub: String(claims.sub || "") };
+          const verified = claims.aud === execClientId && claims.email_verified === true && Number(claims.exp) * 1000 > Date.now() && validExecAccount(account);
+          if (!verified) throw new Error("Unapproved account");
+          execError.textContent = "";
+          openExecDashboard(saveExecAccount(claims));
+        } catch {
+          execError.textContent = "Use a Google Workspace account managed by naviopathways.com.";
+          window.google?.accounts?.id?.disableAutoSelect();
+        }
+      },
+    });
+    renderExecButton();
+  };
+
+  try {
+    const savedAccount = JSON.parse(localStorage.getItem(execStorageKey));
+    if (validExecAccount(savedAccount)) openExecDashboard(savedAccount);
+  } catch { /* The sign-in button remains available. */ }
+
+  execSignOut.addEventListener("click", () => {
+    try { localStorage.removeItem(execStorageKey); } catch { /* No storage to clear. */ }
+    execDashboard.hidden = true;
+    execGate.hidden = false;
+    window.google?.accounts?.id?.disableAutoSelect();
+    renderExecButton();
+  });
+
+  const googleScript = document.createElement("script");
+  googleScript.src = "https://accounts.google.com/gsi/client";
+  googleScript.async = true;
+  googleScript.defer = true;
+  googleScript.addEventListener("load", initializeExecSignIn, { once: true });
+  googleScript.addEventListener("error", () => { execError.textContent = "Google sign-in could not load. Check your connection and refresh the page."; }, { once: true });
+  document.head.append(googleScript);
+}
