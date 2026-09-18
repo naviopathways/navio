@@ -24,6 +24,16 @@ const policyLinks = [
   ["Youth safety", "/youth-safety/"],
 ];
 
+const timeOptions = Array.from({ length: 48 }, (_, index) => {
+  const totalMinutes = index * 30;
+  const hour = Math.floor(totalMinutes / 60);
+  const minute = totalMinutes % 60;
+  const value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+  const displayHour = hour % 12 || 12;
+  const period = hour < 12 ? "AM" : "PM";
+  return { value, label: `${displayHour}:${String(minute).padStart(2, "0")} ${period}` };
+});
+
 const normalizePath = (path) => {
   if (!path) return "/";
   if (path === "/404.html") return path;
@@ -239,11 +249,11 @@ function VolunteerHoursPage() {
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-date">Date completed</label><input id="hours-date" name="date" type="date" required /></div>
-              <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output className="hours-total-output" id="hours-total" htmlFor="hours-start hours-end">0.00 hours</output></div>
+              <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output className="hours-total-output" id="hours-total" htmlFor="hours-start hours-end">—</output></div>
             </div>
             <div className="hours-fields-two">
-              <div className="hours-field"><label htmlFor="hours-start">Start time <span>30-minute intervals</span></label><input id="hours-start" name="startTime" type="time" min="00:00" max="23:30" step="1800" required /></div>
-              <div className="hours-field"><label htmlFor="hours-end">End time <span>30-minute intervals</span></label><input id="hours-end" name="endTime" type="time" min="00:00" max="23:30" step="1800" required /></div>
+              <div className="hours-field"><label htmlFor="hours-start">Start time <span>Choose a time</span></label><select id="hours-start" name="startTime" required><option value="">Select start time</option>{timeOptions.map(({ value, label }) => <option key={`start-${value}`} value={value}>{label}</option>)}</select></div>
+              <div className="hours-field"><label htmlFor="hours-end">End time <span>Choose a time</span></label><select id="hours-end" name="endTime" required><option value="">Select end time</option>{timeOptions.map(({ value, label }) => <option key={`end-${value}`} value={value}>{label}</option>)}</select></div>
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-task-id">Task ID</label><input id="hours-task-id" name="taskId" type="number" min="1" step="1" inputMode="numeric" placeholder="Enter the assigned Task ID" required /><p className="hours-task-status" id="hours-task-status" role="status" aria-live="polite" /></div>

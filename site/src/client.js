@@ -470,17 +470,6 @@ if (execGate) {
   });
 
   if (hoursForm) {
-    const validateTimeIncrement = (input) => {
-      if (!input.value) {
-        input.setCustomValidity("");
-        return true;
-      }
-      const [, minute] = input.value.split(":").map(Number);
-      const valid = minute === 0 || minute === 30;
-      input.setCustomValidity(valid ? "" : "Choose a time on the hour or half-hour.");
-      return valid;
-    };
-
     const durationMinutes = () => {
       if (!hoursStart.value || !hoursEnd.value) return 0;
       const [startHour, startMinute] = hoursStart.value.split(":").map(Number);
@@ -489,10 +478,13 @@ if (execGate) {
     };
 
     const updateHoursTotal = () => {
-      validateTimeIncrement(hoursStart);
-      validateTimeIncrement(hoursEnd);
       const minutes = durationMinutes();
-      hoursTotal.textContent = minutes > 0 ? `${(minutes / 60).toFixed(2)} hours` : "0.00 hours";
+      if (minutes <= 0) {
+        hoursTotal.textContent = "—";
+        return;
+      }
+      const hours = minutes / 60;
+      hoursTotal.textContent = `${hours === 1 ? "1" : hours.toString()} ${hours === 1 ? "hour" : "hours"}`;
     };
 
     hoursStart.addEventListener("input", updateHoursTotal);
