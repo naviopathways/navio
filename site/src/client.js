@@ -467,7 +467,6 @@ if (execGate) {
         endTime: String(formData.get("endTime") || ""),
         description: String(formData.get("description") || "").trim(),
         notes: String(formData.get("notes") || "").trim(),
-        signatureRequestedFrom: String(formData.get("signatureRequestedFrom") || "CEO"),
         fileName: schoolFormData.fileName,
         fileType: schoolFormData.fileType,
         fileData: schoolFormData.fileData,
