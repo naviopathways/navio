@@ -268,11 +268,19 @@ if (execGate) {
       return;
     }
     const token = readValidExecToken();
-    if (!token) return;
+    if (!token) {
+      if (hoursTaskStatus) {
+        hoursTaskStatus.textContent = "Your Workspace session expired. Sign in again to check this task.";
+        hoursTaskStatus.className = "hours-task-status is-error";
+      }
+      return;
+    }
     if (hoursTaskStatus) hoursTaskStatus.textContent = "Checking task assignment...";
     taskLookupTimer = window.setTimeout(() => {
-      const callbackName = "__navioTaskLookup";
-      window[callbackName] = (result) => {
+      const lookupUrl = `${volunteerHoursEndpoint}?action=task&taskId=${encodeURIComponent(taskId)}&idToken=${encodeURIComponent(token)}&_=${Date.now()}`;
+      fetch(lookupUrl, { headers: { Accept: "application/json" } })
+        .then((response) => response.json())
+        .then((result) => {
         taskIsValid = Boolean(result?.ok);
         if (taskIsValid) {
           hoursTaskTitle.textContent = result.title || "Untitled task";
@@ -285,19 +293,12 @@ if (execGate) {
           hoursTaskStatus.textContent = result?.error || "This task could not be verified.";
           hoursTaskStatus.className = "hours-task-status is-error";
         }
-        delete window[callbackName];
-        lookupScript.remove();
-      };
-      const lookupScript = document.createElement("script");
-      lookupScript.src = `${volunteerHoursEndpoint}?action=task&taskId=${encodeURIComponent(taskId)}&idToken=${encodeURIComponent(token)}&callback=${callbackName}&_=${Date.now()}`;
-      lookupScript.onerror = () => {
+        })
+        .catch(() => {
         taskIsValid = false;
         hoursTaskStatus.textContent = "The task list could not be checked. Try again.";
         hoursTaskStatus.className = "hours-task-status is-error";
-        delete window[callbackName];
-        lookupScript.remove();
-      };
-      document.head.append(lookupScript);
+        });
     }, 350);
   };
 
