@@ -239,7 +239,7 @@ function VolunteerHoursPage() {
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-date">Date completed</label><input id="hours-date" name="date" type="date" required /></div>
-              <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output id="hours-total" htmlFor="hours-start hours-end">0.00 hours</output></div>
+              <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output className="hours-total-output" id="hours-total" htmlFor="hours-start hours-end">0.00 hours</output></div>
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-start">Start time</label><input id="hours-start" name="startTime" type="time" required /></div>
@@ -247,7 +247,7 @@ function VolunteerHoursPage() {
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-task-id">Task ID</label><input id="hours-task-id" name="taskId" type="number" min="1" step="1" inputMode="numeric" placeholder="Enter the assigned Task ID" required /><p className="hours-task-status" id="hours-task-status" role="status" aria-live="polite" /></div>
-              <div className="hours-field"><label htmlFor="hours-task-title">Task title</label><output id="hours-task-title" htmlFor="hours-task-id">Enter a Task ID to load the assigned task.</output></div>
+              <div className="hours-field"><label htmlFor="hours-task-title">Task title</label><output className="hours-task-title-output" id="hours-task-title" htmlFor="hours-task-id">Enter a Task ID to load the assigned task.</output></div>
             </div>
             <div className="hours-field"><label htmlFor="hours-task-description">Task description</label><output id="hours-task-description" htmlFor="hours-task-id">—</output></div>
             <div className="hours-field"><label htmlFor="hours-notes">Additional notes <span>Optional</span></label><textarea id="hours-notes" name="notes" rows="3" maxLength="1000" placeholder="Add a project name, event, supervisor, or other useful context." /></div>

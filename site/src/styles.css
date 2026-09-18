@@ -789,17 +789,17 @@ img, svg { display: block; max-width: 100%; }
 .hours-intro > p:last-child { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
 .hours-layout { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(19rem, .62fr); align-items: start; gap: 1rem; }
 .hours-form, .hours-process { border: 1px solid var(--line); background: rgba(61,59,71,.8); box-shadow: 0 1.5rem 4rem rgba(0,0,0,.18); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-.hours-form { padding: clamp(1.5rem, 4vw, 2.7rem); border-radius: 1.65rem 1.65rem 5rem 1.65rem; }
-.hours-form-heading { display: grid; grid-template-columns: 2.8rem 1fr; gap: 1rem; margin-bottom: 2rem; }
+.hours-form { padding: clamp(1.35rem, 3vw, 2.35rem); border-radius: 1.65rem 1.65rem 5rem 1.65rem; }
+.hours-form-heading { display: grid; grid-template-columns: 2.8rem 1fr; gap: 1rem; margin-bottom: 1.55rem; }
 .hours-form-heading > span { display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--orchid); font-size: .66rem; font-weight: 780; }
 .hours-form-heading h2 { margin-bottom: .35rem; font-size: 1.4rem; }
 .hours-form-heading p { margin: 0; color: var(--muted); font-size: .83rem; }
-.hours-applicant { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.6rem; padding: 1rem; border: 1px solid rgba(191,102,173,.24); border-radius: 1rem; background: rgba(82,61,87,.42); }
+.hours-applicant { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.25rem; padding: .9rem 1rem; border: 1px solid rgba(191,102,173,.24); border-radius: 1rem; background: rgba(82,61,87,.42); }
 .hours-applicant div { min-width: 0; }
 .hours-applicant small { display: block; margin-bottom: .22rem; color: var(--orchid); font-size: .58rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
 .hours-applicant strong { display: block; overflow: hidden; color: var(--ink-soft); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
 .hours-fields-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.hours-field { margin-bottom: 1.25rem; }
+.hours-field { margin-bottom: 1.05rem; }
 .hours-field label { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; color: var(--ink-soft); font-size: .76rem; font-weight: 720; }
 .hours-field label span { color: var(--muted); font-size: .64rem; font-weight: 600; }
 .hours-field input, .hours-field select, .hours-field textarea, .hours-field output { width: 100%; border: 1px solid var(--line-strong); border-radius: .85rem; background: rgba(56,56,66,.9); color: var(--white); transition: border-color 500ms var(--ease-soft), box-shadow 600ms var(--ease-soft), transform 650ms var(--ease-bloom), background 500ms var(--ease-soft); }
@@ -808,7 +808,9 @@ img, svg { display: block; max-width: 100%; }
 .hours-field input[type="file"] { height: auto; padding: .8rem 1rem; }
 .hours-field small { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1.45; }
 .hours-field textarea { display: block; min-height: 7rem; resize: vertical; padding: .9rem 1rem; line-height: 1.55; }
-.hours-field output { display: flex; min-height: 3.3rem; align-items: center; padding: 0 1rem; color: var(--orchid); font-weight: 760; }
+.hours-field output { display: flex; min-height: 3.3rem; align-items: center; padding: 0 1rem; color: var(--ink-soft); font-weight: 580; line-height: 1.35; }
+.hours-total-output { color: var(--orchid) !important; font-weight: 760 !important; }
+.hours-task-title-output { min-height: 3.3rem; color: var(--muted) !important; font-size: .86rem; font-weight: 600 !important; }
 .hours-field output[ id="hours-task-description" ] { min-height: 7rem; align-items: flex-start; padding-top: .9rem; padding-bottom: .9rem; color: var(--ink-soft); font-weight: 560; line-height: 1.55; white-space: pre-wrap; }
 .hours-task-status { min-height: 1.25rem; margin: .45rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.4; }
 .hours-task-status.is-error { color: #ffb0c3; }
