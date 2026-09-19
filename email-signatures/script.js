@@ -225,7 +225,7 @@ const signatureMarkup = (fullName, role) => `
   <tr>
     <td style="vertical-align:middle; padding-right:14px;">
       <img
-        src="https://sqhil-a.github.io/navio/assets/email-signature.png"
+        src="https://naviopathways.github.io/navio/assets/email-signature.png"
         alt="Navio Pathways"
         width="100"
         style="display:block; width:100px; height:auto; border:0;"
@@ -272,7 +272,7 @@ const signatureMarkup = (fullName, role) => `
           <td style="padding-right:6px;">
             <a href="https://naviopathways.com" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
               <img
-                src="https://sqhil-a.github.io/navio/assets/website.png"
+                src="https://naviopathways.github.io/navio/assets/website.png"
                 alt="Website"
                 width="30"
                 height="30"
@@ -283,7 +283,7 @@ const signatureMarkup = (fullName, role) => `
           <td style="padding-right:6px;">
             <a href="https://www.linkedin.com/company/navio-pathways/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
               <img
-                src="https://sqhil-a.github.io/navio/assets/linkedin.png"
+                src="https://naviopathways.github.io/navio/assets/linkedin.png"
                 alt="LinkedIn"
                 width="30"
                 height="30"
@@ -294,7 +294,7 @@ const signatureMarkup = (fullName, role) => `
           <td>
             <a href="https://www.instagram.com/naviopathways/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
               <img
-                src="https://sqhil-a.github.io/navio/assets/instagram.png"
+                src="https://naviopathways.github.io/navio/assets/instagram.png"
                 alt="Instagram"
                 width="30"
                 height="30"
