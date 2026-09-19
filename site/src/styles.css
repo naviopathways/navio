@@ -804,7 +804,9 @@ img, svg { display: block; max-width: 100%; }
 .hours-field label span { color: var(--muted); font-size: .64rem; font-weight: 600; }
 .hours-field input, .hours-field select, .hours-field textarea, .hours-field output { width: 100%; border: 1px solid var(--line-strong); border-radius: .85rem; background: rgba(56,56,66,.9); color: var(--white); transition: border-color 500ms var(--ease-soft), box-shadow 600ms var(--ease-soft), transform 650ms var(--ease-bloom), background 500ms var(--ease-soft); }
 .hours-field input { min-height: 3.3rem; padding: 0 1rem; color-scheme: dark; }
-.hours-field select { min-height: 3.3rem; padding: 0 1rem; color-scheme: dark; }
+.hours-select-wrap { position: relative; }
+.hours-select-wrap::after { position: absolute; top: 50%; right: 1.1rem; width: .5rem; height: .5rem; border-right: 1.5px solid var(--orchid); border-bottom: 1.5px solid var(--orchid); content: ""; pointer-events: none; transform: translateY(-70%) rotate(45deg); }
+.hours-field select { min-height: 3.3rem; appearance: none; padding: 0 2.9rem 0 1rem; color-scheme: dark; }
 .hours-field input[type="file"] { height: auto; padding: .8rem 1rem; }
 .hours-field small { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1.45; }
 .hours-field textarea { display: block; min-height: 7rem; resize: vertical; padding: .9rem 1rem; line-height: 1.55; }

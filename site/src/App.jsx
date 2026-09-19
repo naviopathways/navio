@@ -252,8 +252,8 @@ function VolunteerHoursPage() {
               <div className="hours-field"><label htmlFor="hours-total">Calculated hours</label><output className="hours-total-output" id="hours-total" htmlFor="hours-start hours-end">—</output></div>
             </div>
             <div className="hours-fields-two">
-              <div className="hours-field"><label htmlFor="hours-start">Start time <span>Choose a time</span></label><select id="hours-start" name="startTime" required><option value="">Select start time</option>{timeOptions.map(({ value, label }) => <option key={`start-${value}`} value={value}>{label}</option>)}</select></div>
-              <div className="hours-field"><label htmlFor="hours-end">End time <span>Choose a time</span></label><select id="hours-end" name="endTime" required><option value="">Select end time</option>{timeOptions.map(({ value, label }) => <option key={`end-${value}`} value={value}>{label}</option>)}</select></div>
+              <div className="hours-field"><label htmlFor="hours-start">Start time <span>30-minute intervals</span></label><div className="hours-select-wrap"><select id="hours-start" name="startTime" required><option value="">Choose a start time</option>{timeOptions.map(({ value, label }) => <option key={`start-${value}`} value={value}>{label}</option>)}</select></div></div>
+              <div className="hours-field"><label htmlFor="hours-end">End time <span>30-minute intervals</span></label><div className="hours-select-wrap"><select id="hours-end" name="endTime" required><option value="">Choose an end time</option>{timeOptions.map(({ value, label }) => <option key={`end-${value}`} value={value}>{label}</option>)}</select></div></div>
             </div>
             <div className="hours-fields-two">
               <div className="hours-field"><label htmlFor="hours-task-id">Task ID</label><input id="hours-task-id" name="taskId" type="number" min="1" step="1" inputMode="numeric" placeholder="Enter the assigned Task ID" required /><p className="hours-task-status" id="hours-task-status" role="status" aria-live="polite" /></div>
