@@ -67,7 +67,7 @@ for (const root of roots) {
   if (!about.includes("Direction should come from experience, not guesswork.")) errors.push(`${join(root, "about/index.html")} is missing the founder perspective`);
 
   const programs = readFileSync(join(root, "programs/index.html"), "utf8");
-  for (const expected of ["Navio NEXT", "Networking", "Exploration", "eXposure", "Transformation", "November 21, 2026", "10:00 AM", "4:00 PM", "Mississauga, Ontario", "To be announced", "Attendance", "Free", "Ontario secondary students", "Panels", "Q&amp;A", "Workshops", "university information", "Finance", "Entrepreneurship", "Hospitality", "Marketing", "Management", "Professionals", "Professors", "University students", "Request conference updates"]) {
+  for (const expected of ["Navio NEXT", "Networking", "Exploration", "eXposure", "Transformation", "November 28, 2026", "10:00 AM", "4:00 PM", "Mississauga, Ontario", "To be announced", "Attendance", "Free", "Ontario secondary students", "Panels", "Q&amp;A", "Workshops", "university information", "Finance", "Entrepreneurship", "Hospitality", "Marketing", "Management", "Professionals", "Professors", "University students", "Request conference updates"]) {
     if (!programs.includes(expected)) errors.push(`${join(root, "programs/index.html")} is missing substantive Navio NEXT content: ${expected}`);
   }
   const programWords = programs.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;

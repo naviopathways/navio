@@ -22,7 +22,7 @@ Last reviewed: August 23, 2026
 
 ## Annual conference
 
-Navio NEXT (Networking, Exploration, eXposure, & Transformation) is Navio Pathways' annual conference. The free, in-person career exploration conference takes place November 21, 2026, from 10:00 AM to 4:00 PM in Mississauga, Ontario. The venue is to be announced. Ontario secondary students and other high-school-aged youth can attend.
+Navio NEXT (Networking, Exploration, eXposure, & Transformation) is Navio Pathways' annual conference. The free, in-person career exploration conference takes place November 28, 2026, from 10:00 AM to 4:00 PM in Mississauga, Ontario. The venue is to be announced. Ontario secondary students and other high-school-aged youth can attend.
 
 NEXT helps youth explore Finance, Entrepreneurship, Hospitality, Marketing, and Management through panels, Q&A sessions, networking, workshops, and university information. Professionals, professors, and university students will speak and answer participant questions.
 
