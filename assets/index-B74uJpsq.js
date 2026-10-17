@@ -36,130 +36,115 @@ Error generating stack: `+e.message+`
           </a>
           <a class="button button-secondary" href="#tiers">View partnership tiers</a>
         </div>`,`sponsor`)}
-      <section class="section sponsor-intro">
-        <div class="container sponsor-intro-grid">
-          <div>
-            <p class="eyebrow">Why partner with Navio</p>
-            <h2>Good questions need room to become direction.</h2>
-          </div>
-          <div>
-            <p>
-              Students make important decisions about courses, post-secondary pathways, and careers before they have seen many of the options available to them. Your support helps Navio make exploration more direct, practical, and connected to real people.
-            </p>
-            <p class="sponsor-note">
-              <span aria-hidden="true">✦</span> Conversation-first, impact-minded, built for Ontario.
-            </p>
-          </div>
+
+<section class="section sponsor-tiers-section" id="tiers">
+  <div class="container">
+    <div class="section-heading heading-with-note">
+      <div>
+        <p class="eyebrow">Three ways to stand behind the work</p>
+        <h2>Choose the level that fits your organization.</h2>
+      </div>
+      <p>
+        Each package adds more visibility and more ways to connect with Navio NEXT participants. Reach out and we’ll walk you through the details.
+      </p>
+    </div>
+
+    <div class="sponsor-tiers">
+
+      <!-- Silver -->
+      <article class="sponsor-tier sponsor-tier-silver">
+        <div class="sponsor-tier-top">
+          <span class="sponsor-gem" aria-hidden="true"></span>
+          <p class="eyebrow">Visibility</p>
         </div>
-      </section>
-      <section class="section sponsor-tiers-section" id="tiers">
-        <div class="container">
-          <div class="section-heading heading-with-note">
-            <div>
-              <p class="eyebrow">Three ways to stand behind the work</p>
-              <h2>Choose the scale that fits your organization.</h2>
-            </div>
-            <p>
-              These tiers are starting points for a partnership conversation. We can shape the details around your goals, audience, and capacity.
-            </p>
-          </div>
-          <div class="sponsor-tiers">
-            <article class="sponsor-tier">
-              <div class="sponsor-tier-top">
-                <span>01</span>
-                <p class="eyebrow">Founding support</p>
-              </div>
-              <h3>Pathfinder</h3>
-              <p class="sponsor-tier-lead">
-                Help open the first door for students who are still finding their direction.
-              </p>
-              <ul>
-                <li>Recognition as a Navio Pathways sponsor</li>
-                <li>Support for student-facing program materials</li>
-                <li>Partner acknowledgement in relevant communications</li>
-                <li>A direct update on the work your support made possible</li>
-              </ul>
-              <a class="text-link" href="mailto:${S}?subject=Pathfinder%20sponsorship%20conversation">
-                Discuss Pathfinder <span aria-hidden="true">↗</span>
-              </a>
-            </article>
-            <article class="sponsor-tier sponsor-tier-featured">
-              <div class="sponsor-tier-top">
-                <span>02</span>
-                <p class="eyebrow">Program support</p>
-              </div>
-              <h3>Navigator</h3>
-              <p class="sponsor-tier-lead">
-                Help students move from curiosity to a real experience, conversation, or next step.
-              </p>
-              <ul>
-                <li>Everything in Pathfinder</li>
-                <li>Stronger visibility across a supported program or event</li>
-                <li>Opportunities to contribute relevant professional perspective</li>
-                <li>Post-program summary of participation and learning</li>
-              </ul>
-              <a class="text-link" href="mailto:${S}?subject=Navigator%20sponsorship%20conversation">
-                Discuss Navigator <span aria-hidden="true">↗</span>
-              </a>
-            </article>
-            <article class="sponsor-tier">
-              <div class="sponsor-tier-top">
-                <span>03</span>
-                <p class="eyebrow">Partner collaboration</p>
-              </div>
-              <h3>North Star</h3>
-              <p class="sponsor-tier-lead">
-                Help shape a sustained pathway of exploration, exposure, and informed choice.
-              </p>
-              <ul>
-                <li>Everything in Navigator</li>
-                <li>A tailored conversation about shared priorities</li>
-                <li>Meaningful opportunities for ongoing collaboration</li>
-                <li>A partnership reflection to guide what comes next</li>
-              </ul>
-              <a class="text-link" href="mailto:${S}?subject=North%20Star%20sponsorship%20conversation">
-                Discuss North Star <span aria-hidden="true">↗</span>
-              </a>
-            </article>
-          </div>
-          <p class="sponsor-disclaimer">
-            Sponsorship details, recognition, and participation are discussed directly with Navio Pathways. Navio Pathways is an Ontario incorporated not-for-profit and does not present sponsorships as tax-deductible donations or charitable receipts.
-          </p>
+        <h3>Silver</h3>
+        <p class="sponsor-price">$199</p>
+        <p class="sponsor-tier-lead">
+          For organizations that want to back Navio NEXT and be seen by participants throughout the conference.
+        </p>
+        <p class="sponsor-seats"><strong>1</strong> rep attends</p>
+        <ul>
+          <li>Logo on Navio NEXT’s introduction slides</li>
+          <li>Logo on promotional materials</li>
+          <li>Recognition on Navio Pathways’ Instagram and website</li>
+          <li>Opportunity to provide brochures or promotional material to participants</li>
+          <li>Certificate of appreciation at the end of the conference</li>
+        </ul>
+        <a class="text-link" href="mailto:${S}?subject=Silver%20Package%20sponsorship%20conversation">
+          Discuss Silver <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      <!-- Gold -->
+      <article class="sponsor-tier sponsor-tier-featured sponsor-tier-gold">
+        <div class="sponsor-tier-top">
+          <span class="sponsor-gem" aria-hidden="true"></span>
+          <p class="eyebrow">Visibility + interaction</p>
         </div>
-      </section>
-      <section class="sponsor-principles">
-        <div class="container sponsor-principles-grid">
-          <div>
-            <p class="eyebrow">A partnership should feel useful</p>
-            <h2>Support that reaches the student experience.</h2>
-          </div>
-          <ol>
-            <li>
-              <span>01</span>
-              <div>
-                <strong>Relevant</strong>
-                <p>Connected to the questions and decisions students are actually navigating.</p>
-              </div>
-            </li>
-            <li>
-              <span>02</span>
-              <div>
-                <strong>Practical</strong>
-                <p>Built around experiences, tools, and conversations rather than vague promises.</p>
-              </div>
-            </li>
-            <li>
-              <span>03</span>
-              <div>
-                <strong>Respectful</strong>
-                <p>Designed to add value for students without turning their exploration into advertising.</p>
-              </div>
-            </li>
-          </ol>
+        <h3>Gold</h3>
+        <p class="sponsor-price">$399</p>
+        <p class="sponsor-tier-lead">
+          For organizations that want more exposure and the chance to talk with participants about their work and careers.
+        </p>
+        <p class="sponsor-seats">Up to <strong>2</strong> reps</p>
+        <ul>
+          <li>Additional logo placements on conference promotional materials</li>
+          <li>Space for a company-provided banner with your logo, slogan, and contact information</li>
+          <li>Recognition on social media and the website</li>
+          <li>Recognition in the closing speech and introduction slideshow</li>
+          <li>Opportunity to distribute branded merchandise to participants</li>
+          <li>Opportunity to network with students and speak about your organization and careers within it</li>
+        </ul>
+        <a class="text-link" href="mailto:${S}?subject=Gold%20Package%20sponsorship%20conversation">
+          Discuss Gold <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      <!-- Diamond -->
+      <article class="sponsor-tier sponsor-tier-diamond">
+        <div class="sponsor-tier-top">
+          <span class="sponsor-gem" aria-hidden="true"></span>
+          <p class="eyebrow">Maximum contribution</p>
         </div>
-      </section>
-      ${ee(`Let’s make the next step more visible.`,`Navio Pathways sponsorship conversation`)}
-    `},"/resources/":{path:`/resources/`,title:`Career exploration resources for students | Navio Pathways`,description:`Use concise Navio Pathways resources to explore careers, prepare for professional conversations, and reflect on practical experience.`,noindex:!1,html:`${w(`Resources`)}${T(`Resources`,`Small tools for a more informed next step.`,`These original guides support career exploration and reflection. Use them independently, with a parent or guardian, or with an educator.`,`<div class="button-row"><a class="button button-primary" href="/programs/">Explore programs <span aria-hidden="true">↗</span></a></div>`,`resources`)}
+        <h3>Diamond</h3>
+        <p class="sponsor-price">$499</p>
+        <p class="sponsor-tier-lead">
+          For organizations that want the most impact: significant visibility and direct engagement with participants and attendees.
+        </p>
+        <p class="sponsor-seats">Up to <strong>4</strong> reps</p>
+        <ul>
+          <li>Featured logo placement throughout conference materials</li>
+          <li>Recognition in the opening and closing speeches</li>
+          <li>Dedicated sponsor feature on Navio Pathways’ social media and website</li>
+          <li>Dedicated booth or tent for networking</li>
+          <li>Approved interactive activities or workshops led by your representatives</li>
+          <li>Designated networking session for participants, led by your representatives</li>
+          <li>Featured recognition as a Diamond sponsor</li>
+        </ul>
+        <a class="text-link" href="mailto:${S}?subject=Diamond%20Package%20sponsorship%20conversation">
+          Discuss Diamond <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+    </div>
+
+    <p class="sponsor-disclaimer">
+      Sponsorship details, recognition, and participation are discussed directly with Navio Pathways. Navio Pathways is an Ontario incorporated not-for-profit and does not present sponsorships as tax-deductible donations or charitable receipts.
+    </p>
+  </div>
+</section>
+<section class="contact-cta">
+  <div class="contact-cta-orbit" aria-hidden="true"></div>
+  <div class="container contact-cta-grid">
+    <div>
+      <h2>Become a Resource Sponsor</h2><p>Resource sponsors are organizations and companies that provide Navio NEXT with services or goods rather than financial support.</p>
+      <p><strong>Benefits include:</strong> Logo/name recognition in promotional materials, verbal recognition during opening speech, Certificate of appreciation</p>
+    </div>
+    <div class="button-row">
+      <a class="button button-light" href="mailto:${S}?subject=Resource%20Sponsorship%20conversation">Reach Out <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>    `},"/resources/":{path:`/resources/`,title:`Career exploration resources for students | Navio Pathways`,description:`Use concise Navio Pathways resources to explore careers, prepare for professional conversations, and reflect on practical experience.`,noindex:!1,html:`${w(`Resources`)}${T(`Resources`,`Small tools for a more informed next step.`,`These original guides support career exploration and reflection. Use them independently, with a parent or guardian, or with an educator.`,`<div class="button-row"><a class="button button-primary" href="/programs/">Explore programs <span aria-hidden="true">↗</span></a></div>`,`resources`)}
     <section class="resource-purpose"><div class="container resource-purpose-grid"><strong>Resources are a supporting part of Navio.</strong><p>They help students prepare and reflect, but they do not replace real experience, guarantee an outcome, or serve as a program application.</p></div></section>
     <section class="section resource-library"><div class="container"><article class="resource-tool" id="career-exploration"><div class="resource-tool-index"><span>Tool 01</span><b>EXPLORE / MAP</b></div><div class="resource-tool-copy"><p class="eyebrow">Career exploration</p><h2>Research the work, not only the title.</h2><p>Choose one career area and build a clearer picture before deciding whether it fits. Use more than one current source and separate what you know from what you still need to ask.</p><ol class="resource-steps"><li><strong>Daily work:</strong> Which tasks fill a normal week, and which responsibilities matter most?</li><li><strong>Environment:</strong> Where, when, and with whom does the work usually happen?</li><li><strong>Pathways:</strong> Which education, training, experience, or portfolio routes can lead there?</li><li><strong>Tradeoffs:</strong> What pressures, constraints, or less-visible parts of the field should you understand?</li><li><strong>Test:</strong> What small project, conversation, course, or activity could help you explore further?</li></ol></div></article><article class="resource-tool" id="professional-conversation"><div class="resource-tool-index"><span>Tool 02</span><b>EXPLORE / ASK</b></div><div class="resource-tool-copy"><p class="eyebrow">Professional conversation</p><h2>Ask questions that reveal the real work.</h2><p>A useful conversation goes beyond “How did you get your job?” Prepare questions that invite specific examples and help you understand what the field demands.</p><ul class="resource-checks"><li><strong>Surprise:</strong> What did you only understand after entering this field?</li><li><strong>Skill:</strong> Which ability do beginners underestimate, and how can they practise it?</li><li><strong>Reality:</strong> What does a normal week look like when the job is busy?</li><li><strong>Change:</strong> How is technology or the market changing the work?</li><li><strong>Next step:</strong> What is one low-risk way for a young person to test their interest?</li></ul></div></article><article class="resource-tool" id="experience-reflection"><div class="resource-tool-index"><span>Tool 03</span><b>EXPERIENCE / REFLECT</b></div><div class="resource-tool-copy"><p class="eyebrow">Experience reflection</p><h2>Turn an activity into evidence about yourself.</h2><p>After a program, project, volunteer role, course, or event, capture what the experience actually showed. A title says very little; your choices and responses reveal far more.</p><div class="pitch-sequence"><p><span>Situation</span><strong>What was happening, and what made it challenging?</strong></p><p><span>Role</span><strong>What responsibility was yours rather than the team’s?</strong></p><p><span>Action</span><strong>Which decision or contribution did you make?</strong></p><p><span>Result</span><strong>What changed, and what evidence supports that?</strong></p><p><span>Next</span><strong>What would you repeat, change, or explore further?</strong></p></div></div></article></div></section>
     <section class="resource-next"><div class="container resource-next-grid"><div><p class="eyebrow">Move from thinking to doing</p><h2>Resources become more useful when an experience tests them.</h2></div><a class="button button-primary" href="/programs/">Explore Navio programs <span aria-hidden="true">↗</span></a></div></section>
